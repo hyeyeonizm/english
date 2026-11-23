@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>왕왕초보 일상 영어 단어장</title>
+  <title>왕왕초보 하루 5단어</title>
   <style>
     :root {
       --bg: #f6f7fb;
@@ -78,6 +78,11 @@
       white-space: nowrap;
     }
 
+    .progress-pill.done {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
     .tabs {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -105,36 +110,6 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     }
 
-    .cat-scroll {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-      scrollbar-width: none;
-    }
-
-    .cat-scroll::-webkit-scrollbar {
-      display: none;
-    }
-
-    .cat-chip {
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--sub);
-      border-radius: 999px;
-      padding: 7px 13px;
-      font-size: 13px;
-      font-weight: 600;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-
-    .cat-chip.active {
-      background: var(--text);
-      color: #fff;
-      border-color: var(--text);
-    }
-
     .panel {
       display: none;
       flex-direction: column;
@@ -144,6 +119,44 @@
 
     .panel.active {
       display: flex;
+    }
+
+    .day-banner {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .day-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .day-sub {
+      font-size: 12px;
+      color: var(--sub);
+      margin-top: 2px;
+    }
+
+    .day-badge {
+      font-size: 12px;
+      font-weight: 800;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .day-badge.done {
+      background: var(--green-soft);
+      color: var(--green);
     }
 
     /* Flashcard */
@@ -156,7 +169,6 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: relative;
       cursor: pointer;
       user-select: none;
       border: 1px solid rgba(0, 0, 0, 0.03);
@@ -295,36 +307,72 @@
       color: var(--green);
     }
 
-    .sub-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      color: var(--sub);
-      padding: 0 2px;
-    }
-
-    .text-btn {
-      border: none;
-      background: none;
-      color: var(--primary);
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      padding: 4px 6px;
-    }
-
-    /* List */
-    .search-input {
-      width: 100%;
-      border: 1px solid var(--border);
+    /* Done Card */
+    .done-screen {
       background: var(--card);
-      border-radius: 14px;
-      padding: 12px 14px;
-      font-size: 15px;
-      outline: none;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 36px 22px;
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
     }
 
+    .done-screen.show {
+      display: flex;
+    }
+
+    .done-emoji {
+      font-size: 52px;
+      line-height: 1;
+    }
+
+    .done-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .done-desc {
+      font-size: 14px;
+      color: var(--sub);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .done-btns {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-soft {
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 11px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-primary-small {
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 12px;
+      padding: 11px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* List (배운 단어만) */
     .word-list {
       display: flex;
       flex-direction: column;
@@ -382,12 +430,6 @@
       color: var(--sub);
     }
 
-    .list-btns {
-      display: flex;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
     .icon-btn {
       width: 38px;
       height: 38px;
@@ -398,13 +440,7 @@
       cursor: pointer;
       display: grid;
       place-items: center;
-    }
-
-    .icon-btn.done {
-      background: var(--green-soft);
-      border-color: #86efac;
-      color: var(--green);
-      font-weight: 800;
+      flex-shrink: 0;
     }
 
     /* Quiz */
@@ -476,88 +512,83 @@
   <div class="app">
     <header>
       <div class="title-wrap">
-        <h1>🌱 왕왕초보 일상 영어</h1>
-        <p>하루 5단어만! 부담 없이 조금씩</p>
+        <h1>🌱 하루 딱 5단어</h1>
+        <p id="headerSub">오늘 몫만 끝내면 진짜 끝!</p>
       </div>
-      <div class="progress-pill" id="progressPill">0 / 0 완료</div>
+      <div class="progress-pill" id="progressPill">0 / 5</div>
     </header>
 
-    <div id="jsWarning" style="background:#fff3cd;border:1px solid #ffeeba;color:#856404;border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.5;">
-      ⚠️ 지금 화면에서 버튼이 안 눌리면, 오른쪽 위 <strong>공유 버튼(□↑) → 'Safari에서 열기'</strong>로 열어 주세요! (앱 미리보기에서는 버튼 동작이 막힐 수 있어요)
-    </div>
-
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
-      <div>
-        <div style="font-size:13px;font-weight:700;color:var(--text);">🎯 오늘 목표: <span id="todayCountText" style="color:var(--primary);">0 / 5단어</span></div>
-        <div style="font-size:12px;color:var(--sub);margin-top:2px;" id="streakText">오늘 첫 5단어에 도전해 보세요!</div>
-      </div>
-      <div id="todayBadge" style="font-size:12px;font-weight:800;padding:6px 10px;border-radius:999px;background:#f2f4f6;color:var(--sub);white-space:nowrap;">진행 중</div>
-    </div>
-
     <div class="tabs">
-      <button class="tab-btn active" data-tab="card">카드 보기</button>
-      <button class="tab-btn" data-tab="list">전체 목록</button>
-      <button class="tab-btn" data-tab="quiz">간단 퀴즈</button>
+      <button class="tab-btn active" data-tab="today">오늘의 5단어</button>
+      <button class="tab-btn" data-tab="quiz">오늘 퀴즈</button>
+      <button class="tab-btn" data-tab="review">배운 단어</button>
     </div>
 
-    <div class="cat-scroll" id="catScroll"></div>
-
-    <!-- 카드 보기 -->
-    <section class="panel active" id="panel-card">
-      <div class="flashcard" id="flashcard">
-        <div class="card-top">
-          <span class="badge-cat" id="cardCat">기본 동사</span>
-          <span id="cardCounter">1 / 50</span>
+    <!-- 오늘의 5단어 -->
+    <section class="panel active" id="panel-today">
+      <div class="day-banner">
+        <div>
+          <div class="day-title" id="dayTitle">Day 1 · 오늘의 5단어</div>
+          <div class="day-sub" id="daySub">5개만 체크하면 오늘 공부 완료예요</div>
         </div>
+        <div class="day-badge" id="dayBadge">0 / 5 완료</div>
+      </div>
 
-        <div class="card-center">
-          <p class="word-en" id="cardEn">wait</p>
-          <p class="word-read" id="cardRead">[웨이트]</p>
-          <button class="speak-btn" id="cardSpeak" type="button">🔊 발음 듣기</button>
+      <div id="todayStudyWrap" style="display:flex;flex-direction:column;gap:14px;">
+        <div class="flashcard" id="flashcard">
+          <div class="card-top">
+            <span class="badge-cat" id="cardCat">기본 동사</span>
+            <span id="cardCounter">1 / 5</span>
+          </div>
 
-          <div class="meaning-box">
-            <p class="word-ko" id="cardKo">기다리다</p>
-            <div class="phrase-box">
-              <div class="phrase-en" id="cardPhraseEn">Wait here.</div>
-              <div class="phrase-ko" id="cardPhraseKo">여기서 기다려.</div>
+          <div class="card-center">
+            <p class="word-en" id="cardEn">go</p>
+            <p class="word-read" id="cardRead">[고]</p>
+            <button class="speak-btn" id="cardSpeak" type="button">🔊 발음 듣기</button>
+
+            <div class="meaning-box">
+              <p class="word-ko" id="cardKo">가다</p>
+              <div class="phrase-box">
+                <div class="phrase-en" id="cardPhraseEn">Let's go.</div>
+                <div class="phrase-ko" id="cardPhraseKo">가자.</div>
+              </div>
             </div>
           </div>
+
+          <div class="tap-hint">카드를 누르면 뜻이 나와요 👇</div>
         </div>
 
-        <div class="tap-hint">카드를 누르면 뜻이 나와요 👇</div>
+        <div class="card-actions">
+          <button class="btn btn-nav" id="prevBtn" type="button">← 이전</button>
+          <button class="btn btn-done" id="doneBtn" type="button">외웠어요 ✓</button>
+          <button class="btn btn-nav" id="nextBtn" type="button">다음 →</button>
+        </div>
       </div>
 
-      <div class="card-actions">
-        <button class="btn btn-nav" id="prevBtn" type="button">← 이전</button>
-        <button class="btn btn-done" id="doneBtn" type="button">외웠어요 ✓</button>
-        <button class="btn btn-nav" id="nextBtn" type="button">다음 →</button>
-      </div>
-
-      <div class="sub-controls">
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-          <input type="checkbox" id="hideDoneToggle" />
-          안 외운 단어만 보기
-        </label>
-        <button class="text-btn" id="shuffleBtn" type="button">🔀 순서 섞기</button>
+      <div class="done-screen" id="doneScreen">
+        <div class="done-emoji">🎉</div>
+        <h2 class="done-title">오늘 할당량 끝!</h2>
+        <p class="done-desc" id="doneDesc">
+          오늘 5단어 다 끝내셨어요 👏<br />
+          더 안 하셔도 되고, 내일 오시면 다음 5단어가 자동으로 열려요.
+        </p>
+        <div class="done-btns">
+          <button class="btn-primary-small" id="goQuizBtn" type="button">오늘 5개 퀴즈 풀기</button>
+          <button class="btn-soft" id="reopenTodayBtn" type="button">오늘 단어 다시 보기</button>
+        </div>
       </div>
     </section>
 
-    <!-- 전체 목록 -->
-    <section class="panel" id="panel-list">
-      <input class="search-input" id="searchInput" type="search" placeholder="단어나 뜻 검색 (예: 먹다, coffee)" />
-      <div class="word-list" id="wordList"></div>
-    </section>
-
-    <!-- 간단 퀴즈 -->
+    <!-- 오늘 퀴즈 -->
     <section class="panel" id="panel-quiz">
       <div class="quiz-card">
         <div class="card-top">
-          <span class="badge-cat" id="quizCount">문제 1 / 10</span>
+          <span class="badge-cat" id="quizCount">문제 1 / 5</span>
           <span id="quizScore">맞힌 개수: 0</span>
         </div>
         <div class="quiz-q">
-          <p class="quiz-word" id="quizWord">eat</p>
-          <p class="quiz-read" id="quizRead">[이트]</p>
+          <p class="quiz-word" id="quizWord">go</p>
+          <p class="quiz-read" id="quizRead">[고]</p>
           <button class="speak-btn" id="quizSpeak" type="button">🔊 발음 듣기</button>
         </div>
         <div class="quiz-options" id="quizOptions"></div>
@@ -565,151 +596,134 @@
         <button class="btn btn-done" id="quizNextBtn" type="button" style="display:none;">다음 문제 →</button>
       </div>
     </section>
+
+    <!-- 배운 단어 (오늘까지 열린 것만) -->
+    <section class="panel" id="panel-review">
+      <div class="day-banner">
+        <div>
+          <div class="day-title">지금까지 연 단어</div>
+          <div class="day-sub" id="reviewSub">오늘치까지만 보여드려요 (부담 X)</div>
+        </div>
+      </div>
+      <div class="word-list" id="wordList"></div>
+    </section>
   </div>
 
   <script>
     const WORDS = [
-      // 1. 꼭 필요한 기본 동사 (12개)
+      // Day 1 (5)
       { id: 1, cat: "기본 동사", en: "go", read: "고", ko: "가다", pEn: "Let's go.", pKo: "가자." },
       { id: 2, cat: "기본 동사", en: "come", read: "컴", ko: "오다", pEn: "Come here.", pKo: "이리 와." },
       { id: 3, cat: "기본 동사", en: "eat", read: "이트", ko: "먹다", pEn: "Eat this.", pKo: "이거 먹어." },
       { id: 4, cat: "기본 동사", en: "drink", read: "드링크", ko: "마시다", pEn: "Drink water.", pKo: "물 마셔." },
-      { id: 5, cat: "기본 동사", en: "see", read: "씨", ko: "보다", pEn: "See you.", pKo: "또 봐." },
-      { id: 6, cat: "기본 동사", en: "wait", read: "웨이트", ko: "기다리다", pEn: "Wait here.", pKo: "여기서 기다려." },
+      { id: 5, cat: "기본 동사", en: "wait", read: "웨이트", ko: "기다리다", pEn: "Wait here.", pKo: "여기서 기다려." },
+
+      // Day 2 (5)
+      { id: 6, cat: "기본 동사", en: "see", read: "씨", ko: "보다", pEn: "See you.", pKo: "또 봐." },
       { id: 7, cat: "기본 동사", en: "buy", read: "바이", ko: "사다", pEn: "Buy this.", pKo: "이거 사자." },
       { id: 8, cat: "기본 동사", en: "pay", read: "페이", ko: "결제하다 / 내다", pEn: "I will pay.", pKo: "내가 낼게." },
       { id: 9, cat: "기본 동사", en: "sleep", read: "슬립", ko: "자다", pEn: "Go to sleep.", pKo: "자러 가자." },
       { id: 10, cat: "기본 동사", en: "rest", read: "레스트", ko: "쉬다", pEn: "Rest now.", pKo: "지금 쉬어." },
-      { id: 11, cat: "기본 동사", en: "need", read: "니드", ko: "필요하다", pEn: "I need this.", pKo: "이거 필요해." },
-      { id: 12, cat: "기본 동사", en: "like", read: "라이크", ko: "좋아하다", pEn: "I like it.", pKo: "이거 좋아." },
 
-      // 2. 집 · 하루 생활 (10개)
-      { id: 13, cat: "집 · 생활", en: "home", read: "홈", ko: "집", pEn: "Go home.", pKo: "집에 가자." },
-      { id: 14, cat: "집 · 생활", en: "room", read: "룸", ko: "방", pEn: "My room.", pKo: "내 방." },
-      { id: 15, cat: "집 · 생활", en: "bed", read: "베드", ko: "침대", pEn: "On the bed.", pKo: "침대 위에." },
-      { id: 16, cat: "집 · 생활", en: "door", read: "도어", ko: "문", pEn: "Open the door.", pKo: "문 열어." },
-      { id: 17, cat: "집 · 생활", en: "phone", read: "폰", ko: "휴대폰", pEn: "My phone.", pKo: "내 휴대폰." },
-      { id: 18, cat: "집 · 생활", en: "bag", read: "백", ko: "가방", pEn: "In my bag.", pKo: "내 가방 안에." },
-      { id: 19, cat: "집 · 생활", en: "key", read: "키", ko: "열쇠", pEn: "Where is my key?", pKo: "열쇠 어디 있지?" },
-      { id: 20, cat: "집 · 생활", en: "morning", read: "모닝", ko: "아침", pEn: "Good morning.", pKo: "좋은 아침." },
-      { id: 21, cat: "집 · 생활", en: "today", read: "투데이", ko: "오늘", pEn: "Today is good.", pKo: "오늘 좋다." },
-      { id: 22, cat: "집 · 생활", en: "tomorrow", read: "투모로우", ko: "내일", pEn: "See you tomorrow.", pKo: "내일 봐." },
+      // Day 3 (5)
+      { id: 11, cat: "카페 · 식당", en: "water", read: "워터", ko: "물", pEn: "Water, please.", pKo: "물 주세요." },
+      { id: 12, cat: "카페 · 식당", en: "coffee", read: "커피", ko: "커피", pEn: "One coffee.", pKo: "커피 한 잔." },
+      { id: 13, cat: "카페 · 식당", en: "order", read: "오더", ko: "주문하다", pEn: "Order now.", pKo: "지금 주문하자." },
+      { id: 14, cat: "카페 · 식당", en: "ice", read: "아이스", ko: "얼음 / 차가운", pEn: "Less ice.", pKo: "얼음 적게." },
+      { id: 15, cat: "카페 · 식당", en: "hot", read: "핫", ko: "뜨거운", pEn: "Hot coffee.", pKo: "따뜻한 커피." },
 
-      // 3. 카페 · 식당 (10개)
-      { id: 23, cat: "카페 · 식당", en: "water", read: "워터", ko: "물", pEn: "Water, please.", pKo: "물 주세요." },
-      { id: 24, cat: "카페 · 식당", en: "coffee", read: "커피", ko: "커피", pEn: "One coffee.", pKo: "커피 한 잔." },
-      { id: 25, cat: "카페 · 식당", en: "food", read: "푸드", ko: "음식", pEn: "Good food.", pKo: "맛있는 음식." },
-      { id: 26, cat: "카페 · 식당", en: "order", read: "오더", ko: "주문하다", pEn: "Order now.", pKo: "지금 주문하자." },
-      { id: 27, cat: "카페 · 식당", en: "menu", read: "메뉴", ko: "메뉴판", pEn: "Menu, please.", pKo: "메뉴판 주세요." },
-      { id: 28, cat: "카페 · 식당", en: "ice", read: "아이스", ko: "얼음 / 차가운", pEn: "Less ice.", pKo: "얼음 적게." },
-      { id: 29, cat: "카페 · 식당", en: "hot", read: "핫", ko: "뜨거운", pEn: "Hot coffee.", pKo: "따뜻한 커피." },
-      { id: 30, cat: "카페 · 식당", en: "sweet", read: "스위트", ko: "달콤한", pEn: "Too sweet.", pKo: "너무 달아." },
-      { id: 31, cat: "카페 · 식당", en: "delicious", read: "딜리셔스", ko: "맛있는", pEn: "It's delicious!", pKo: "맛있다!" },
-      { id: 32, cat: "카페 · 식당", en: "full", read: "풀", ko: "배부른 / 가득 찬", pEn: "I'm full.", pKo: "배불러." },
+      // Day 4 (5)
+      { id: 16, cat: "기분 · 상태", en: "good", read: "굿", ko: "좋은", pEn: "Sounds good.", pKo: "좋네." },
+      { id: 17, cat: "기분 · 상태", en: "bad", read: "배드", ko: "나쁜 / 안 좋은", pEn: "Not bad.", pKo: "나쁘지 않아." },
+      { id: 18, cat: "기분 · 상태", en: "tired", read: "타이어드", ko: "피곤한", pEn: "I'm tired.", pKo: "나 피곤해." },
+      { id: 19, cat: "기분 · 상태", en: "hungry", read: "헝그리", ko: "배고픈", pEn: "I'm hungry.", pKo: "배고파." },
+      { id: 20, cat: "기분 · 상태", en: "thanks", read: "땡스", ko: "고마워요", pEn: "Thanks a lot.", pKo: "정말 고마워요." },
 
-      // 4. 쇼핑 · 길 · 여행 (10개)
-      { id: 33, cat: "쇼핑 · 여행", en: "price", read: "프라이스", ko: "가격", pEn: "Good price.", pKo: "가격 좋다." },
-      { id: 34, cat: "쇼핑 · 여행", en: "cheap", read: "칩", ko: "싼 / 저렴한", pEn: "It's cheap.", pKo: "이거 싸다." },
-      { id: 35, cat: "쇼핑 · 여행", en: "card", read: "카드", ko: "카드", pEn: "By card.", pKo: "카드로요." },
-      { id: 36, cat: "쇼핑 · 여행", en: "cash", read: "캐시", ko: "현금", pEn: "No cash.", pKo: "현금 없어요." },
-      { id: 37, cat: "쇼핑 · 여행", en: "receipt", read: "리시트", ko: "영수증", pEn: "No receipt.", pKo: "영수증 괜찮아요." },
-      { id: 38, cat: "쇼핑 · 여행", en: "here", read: "히어", ko: "여기", pEn: "Right here.", pKo: "바로 여기." },
-      { id: 39, cat: "쇼핑 · 여행", en: "there", read: "데어", ko: "저기", pEn: "Over there.", pKo: "저기요." },
-      { id: 40, cat: "쇼핑 · 여행", en: "left", read: "레프트", ko: "왼쪽", pEn: "Turn left.", pKo: "왼쪽으로 돌아." },
-      { id: 41, cat: "쇼핑 · 여행", en: "right", read: "라이트", ko: "오른쪽 / 맞는", pEn: "Turn right.", pKo: "오른쪽으로 돌아." },
-      { id: 42, cat: "쇼핑 · 여행", en: "station", read: "스테이션", ko: "역", pEn: "Subway station.", pKo: "지하철역." },
+      // Day 5 (5)
+      { id: 21, cat: "집 · 생활", en: "home", read: "홈", ko: "집", pEn: "Go home.", pKo: "집에 가자." },
+      { id: 22, cat: "집 · 생활", en: "room", read: "룸", ko: "방", pEn: "My room.", pKo: "내 방." },
+      { id: 23, cat: "집 · 생활", en: "phone", read: "폰", ko: "휴대폰", pEn: "My phone.", pKo: "내 휴대폰." },
+      { id: 24, cat: "집 · 생활", en: "bag", read: "백", ko: "가방", pEn: "In my bag.", pKo: "내 가방 안에." },
+      { id: 25, cat: "집 · 생활", en: "today", read: "투데이", ko: "오늘", pEn: "Today is good.", pKo: "오늘 좋다." },
 
-      // 5. 기분 · 상태 표현 (8개)
-      { id: 43, cat: "기분 · 상태", en: "good", read: "굿", ko: "좋은", pEn: "Sounds good.", pKo: "좋네." },
-      { id: 44, cat: "기분 · 상태", en: "bad", read: "배드", ko: "나쁜 / 안 좋은", pEn: "Not bad.", pKo: "나쁘지 않아." },
-      { id: 45, cat: "기분 · 상태", en: "happy", read: "해피", ko: "행복한 / 기쁜", pEn: "I'm happy.", pKo: "나 기뻐." },
-      { id: 46, cat: "기분 · 상태", en: "tired", read: "타이어드", ko: "피곤한", pEn: "I'm tired.", pKo: "나 피곤해." },
-      { id: 47, cat: "기분 · 상태", en: "busy", read: "비지", ko: "바쁜", pEn: "I'm busy.", pKo: "나 바빠." },
-      { id: 48, cat: "기분 · 상태", en: "hungry", read: "헝그리", ko: "배고픈", pEn: "I'm hungry.", pKo: "배고파." },
-      { id: 49, cat: "기분 · 상태", en: "sorry", read: "쏘리", ko: "미안한", pEn: "I'm sorry.", pKo: "미안해요." },
-      { id: 50, cat: "기분 · 상태", en: "thanks", read: "땡스", ko: "고마워요", pEn: "Thanks a lot.", pKo: "정말 고마워요." }
+      // Day 6 (5)
+      { id: 26, cat: "쇼핑 · 여행", en: "price", read: "프라이스", ko: "가격", pEn: "Good price.", pKo: "가격 좋다." },
+      { id: 27, cat: "쇼핑 · 여행", en: "cheap", read: "칩", ko: "싼 / 저렴한", pEn: "It's cheap.", pKo: "이거 싸다." },
+      { id: 28, cat: "쇼핑 · 여행", en: "card", read: "카드", ko: "카드", pEn: "By card.", pKo: "카드로요." },
+      { id: 29, cat: "쇼핑 · 여행", en: "here", read: "히어", ko: "여기", pEn: "Right here.", pKo: "바로 여기." },
+      { id: 30, cat: "쇼핑 · 여행", en: "station", read: "스테이션", ko: "역", pEn: "Subway station.", pKo: "지하철역." },
+
+      // Day 7 (5)
+      { id: 31, cat: "기본 동사", en: "need", read: "니드", ko: "필요하다", pEn: "I need this.", pKo: "이거 필요해." },
+      { id: 32, cat: "기본 동사", en: "like", read: "라이크", ko: "좋아하다", pEn: "I like it.", pKo: "이거 좋아." },
+      { id: 33, cat: "기분 · 상태", en: "happy", read: "해피", ko: "행복한 / 기쁜", pEn: "I'm happy.", pKo: "나 기뻐." },
+      { id: 34, cat: "기분 · 상태", en: "busy", read: "비지", ko: "바쁜", pEn: "I'm busy.", pKo: "나 바빠." },
+      { id: 35, cat: "기분 · 상태", en: "sorry", read: "쏘리", ko: "미안한", pEn: "I'm sorry.", pKo: "미안해요." }
     ];
 
-    const STORAGE_KEY = "hyeyeon_basic_vocab_done_v1";
-    const DAILY_KEY = "hyeyeon_basic_vocab_daily_v1";
-
-    // JS가 정상 실행되면 안내 배너 숨김
-    const jsWarn = document.getElementById("jsWarning");
-    if (jsWarn) jsWarn.style.display = "none";
+    const STATE_KEY = "hyeyeon_daily5_state_v2";
+    const DAILY_SIZE = 5;
 
     function safeGet(key, fallback) {
       try {
-        const val = window.localStorage.getItem(key);
-        return val ? JSON.parse(val) : fallback;
+        const v = window.localStorage.getItem(key);
+        return v ? JSON.parse(v) : fallback;
       } catch (e) {
         return fallback;
       }
     }
 
-    function safeSet(key, value) {
+    function safeSet(key, val) {
       try {
-        window.localStorage.setItem(key, JSON.stringify(value));
-      } catch (e) {
-        // 미리보기 등 localStorage 차단 환경에서는 메모리 상태로만 동작
-      }
+        window.localStorage.setItem(key, JSON.stringify(val));
+      } catch (e) {}
     }
-
-    let doneIds = new Set(safeGet(STORAGE_KEY, []));
-    let dailyState = safeGet(DAILY_KEY, {});
-    let activeCat = "전체";
-    let cardOrder = [...WORDS];
-    let cardIdx = 0;
 
     function getTodayStr() {
       const d = new Date();
       return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
     }
 
-    function ensureTodayState() {
+    const totalDays = Math.ceil(WORDS.length / DAILY_SIZE);
+    let state = safeGet(STATE_KEY, {
+      dayIndex: 0,           // 현재 진행 중인 Day (0부터 시작)
+      lastDate: getTodayStr(),
+      doneIds: [],
+      reviewingToday: false
+    });
+
+    // 날짜가 바뀌었고, 이전 날 5단어를 다 끝냈다면 다음 날로 자동 이동!
+    function syncDayForToday() {
       const today = getTodayStr();
-      if (dailyState.date !== today) {
-        const y = new Date();
-        y.setDate(y.getDate() - 1);
-        const yStr = y.getFullYear() + "-" + String(y.getMonth() + 1).padStart(2, "0") + "-" + String(y.getDate()).padStart(2, "0");
-        const prevStreak = (dailyState.date === yStr && (dailyState.count || 0) >= 5) ? (dailyState.streak || 0) : (dailyState.date === yStr ? (dailyState.streak || 0) : 0);
-        dailyState = { date: today, count: 0, streak: prevStreak, goalReachedToday: false };
-        safeSet(DAILY_KEY, dailyState);
+      if (state.lastDate !== today) {
+        const prevStart = state.dayIndex * DAILY_SIZE;
+        const prevWords = WORDS.slice(prevStart, prevStart + DAILY_SIZE);
+        const prevDone = prevWords.length > 0 && prevWords.every(w => state.doneIds.includes(w.id));
+        if (prevDone) {
+          state.dayIndex = (state.dayIndex + 1) % totalDays;
+          if (state.dayIndex === 0) {
+            state.doneIds = []; // 한 바퀴 다 돌았으면 새로 시작
+          }
+        }
+        state.lastDate = today;
+        state.reviewingToday = false;
+        safeSet(STATE_KEY, state);
       }
     }
 
-    function recordTodayProgress(added) {
-      ensureTodayState();
-      dailyState.count = Math.max(0, (dailyState.count || 0) + (added ? 1 : -1));
-      if (dailyState.count >= 5 && !dailyState.goalReachedToday) {
-        dailyState.goalReachedToday = true;
-        dailyState.streak = (dailyState.streak || 0) + 1;
-      }
-      safeSet(DAILY_KEY, dailyState);
+    syncDayForToday();
+
+    let cardIdx = 0;
+    let forceShowCards = false;
+
+    function getTodayWords() {
+      const start = state.dayIndex * DAILY_SIZE;
+      return WORDS.slice(start, start + DAILY_SIZE);
     }
 
-    function saveDone() {
-      safeSet(STORAGE_KEY, [...doneIds]);
-      updateProgress();
-    }
-
-    function updateProgress() {
-      ensureTodayState();
-      document.getElementById("progressPill").textContent = `${doneIds.size} / ${WORDS.length} 완료`;
-      const c = Math.min(5, dailyState.count || 0);
-      document.getElementById("todayCountText").textContent = `${c} / 5단어`;
-      const badge = document.getElementById("todayBadge");
-      const streakText = document.getElementById("streakText");
-      if ((dailyState.count || 0) >= 5) {
-        badge.textContent = "오늘 완료 🎉";
-        badge.style.background = "var(--green-soft)";
-        badge.style.color = "var(--green)";
-        streakText.textContent = `연속 ${dailyState.streak || 1}일째 달성! 너무 잘하셨어요 👏`;
-      } else {
-        badge.textContent = `${5 - c}개 남음`;
-        badge.style.background = "var(--primary-soft)";
-        badge.style.color = "var(--primary)";
-        streakText.textContent = dailyState.streak > 0 ? `현재 ${dailyState.streak}일 연속 달성 중!` : "오늘 5개만 체크하면 목표 완료!";
-      }
+    function getUnlockedWords() {
+      const end = (state.dayIndex + 1) * DAILY_SIZE;
+      return WORDS.slice(0, end);
     }
 
     function speak(text) {
@@ -721,35 +735,6 @@
       window.speechSynthesis.speak(u);
     }
 
-    // Categories
-    const categories = ["전체", ...new Set(WORDS.map(w => w.cat))];
-    const catScroll = document.getElementById("catScroll");
-    function renderCats() {
-      catScroll.innerHTML = "";
-      categories.forEach(cat => {
-        const btn = document.createElement("button");
-        btn.className = "cat-chip" + (activeCat === cat ? " active" : "");
-        btn.textContent = cat;
-        btn.onclick = () => {
-          activeCat = cat;
-          cardIdx = 0;
-          renderCats();
-          renderCard();
-          renderList();
-        };
-        catScroll.appendChild(btn);
-      });
-    }
-
-    function getFilteredWords(forCard = false) {
-      let list = cardOrder.filter(w => activeCat === "전체" || w.cat === activeCat);
-      if (forCard && document.getElementById("hideDoneToggle").checked) {
-        const undone = list.filter(w => !doneIds.has(w.id));
-        if (undone.length > 0) list = undone;
-      }
-      return list;
-    }
-
     // Tabs
     document.querySelectorAll(".tab-btn").forEach(btn => {
       btn.onclick = () => {
@@ -758,28 +743,54 @@
         btn.classList.add("active");
         document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
         if (btn.dataset.tab === "quiz") startQuiz();
+        if (btn.dataset.tab === "review") renderReview();
       };
     });
 
-    // Flashcard
     const flashcard = document.getElementById("flashcard");
-    function renderCard() {
-      const list = getFilteredWords(true);
-      if (cardIdx >= list.length) cardIdx = 0;
-      if (cardIdx < 0) cardIdx = list.length - 1;
-      const w = list[cardIdx];
+    flashcard.onclick = () => flashcard.classList.toggle("revealed");
+
+    function renderToday() {
+      const todayWords = getTodayWords();
+      const doneCount = todayWords.filter(w => state.doneIds.includes(w.id)).length;
+      const allDone = doneCount === todayWords.length;
+
+      document.getElementById("dayTitle").textContent = `Day ${state.dayIndex + 1} · 오늘의 5단어`;
+      document.getElementById("progressPill").textContent = `${doneCount} / ${todayWords.length}`;
+      document.getElementById("progressPill").classList.toggle("done", allDone);
+      document.getElementById("dayBadge").textContent = allDone ? "오늘 완료 🎉" : `${doneCount} / ${todayWords.length} 완료`;
+      document.getElementById("dayBadge").classList.toggle("done", allDone);
+      document.getElementById("daySub").textContent = allDone
+        ? "할당량 끝! 내일 자정 이후 다음 5단어가 열려요"
+        : "딱 5개만 체크하면 오늘 공부 끝이에요";
+
+      const studyWrap = document.getElementById("todayStudyWrap");
+      const doneScreen = document.getElementById("doneScreen");
+
+      if (allDone && !forceShowCards) {
+        studyWrap.style.display = "none";
+        doneScreen.classList.add("show");
+        return;
+      }
+
+      studyWrap.style.display = "flex";
+      doneScreen.classList.remove("show");
+
+      if (cardIdx >= todayWords.length) cardIdx = 0;
+      if (cardIdx < 0) cardIdx = todayWords.length - 1;
+      const w = todayWords[cardIdx];
 
       flashcard.classList.remove("revealed");
       document.getElementById("cardCat").textContent = w.cat;
-      document.getElementById("cardCounter").textContent = `${cardIdx + 1} / ${list.length}`;
+      document.getElementById("cardCounter").textContent = `${cardIdx + 1} / ${todayWords.length}`;
       document.getElementById("cardEn").textContent = w.en;
       document.getElementById("cardRead").textContent = `[${w.read}]`;
       document.getElementById("cardKo").textContent = w.ko;
       document.getElementById("cardPhraseEn").textContent = w.pEn;
       document.getElementById("cardPhraseKo").textContent = w.pKo;
 
+      const isDone = state.doneIds.includes(w.id);
       const doneBtn = document.getElementById("doneBtn");
-      const isDone = doneIds.has(w.id);
       doneBtn.textContent = isDone ? "외움 완료 ✓" : "외웠어요 ✓";
       doneBtn.classList.toggle("is-done", isDone);
 
@@ -789,57 +800,48 @@
       };
 
       doneBtn.onclick = () => {
-        const adding = !doneIds.has(w.id);
-        if (adding) doneIds.add(w.id);
-        else doneIds.delete(w.id);
-        recordTodayProgress(adding);
-        saveDone();
-        renderCard();
-        renderList();
+        if (isDone) {
+          state.doneIds = state.doneIds.filter(id => id !== w.id);
+        } else {
+          state.doneIds.push(w.id);
+          // 다음 안 외운 단어로 자동 이동 (마지막이면 완료 화면으로!)
+          const nextUndone = todayWords.findIndex((item, idx) => idx > cardIdx && !state.doneIds.includes(item.id));
+          if (nextUndone !== -1) cardIdx = nextUndone;
+        }
+        forceShowCards = false;
+        safeSet(STATE_KEY, state);
+        renderToday();
       };
     }
 
-    flashcard.onclick = () => {
-      flashcard.classList.toggle("revealed");
-    };
-
     document.getElementById("prevBtn").onclick = () => {
       cardIdx--;
-      renderCard();
+      renderToday();
     };
 
     document.getElementById("nextBtn").onclick = () => {
       cardIdx++;
-      renderCard();
+      renderToday();
     };
 
-    document.getElementById("hideDoneToggle").onchange = () => {
+    document.getElementById("reopenTodayBtn").onclick = () => {
+      forceShowCards = true;
       cardIdx = 0;
-      renderCard();
+      renderToday();
     };
 
-    document.getElementById("shuffleBtn").onclick = () => {
-      cardOrder = [...WORDS].sort(() => Math.random() - 0.5);
-      cardIdx = 0;
-      renderCard();
+    document.getElementById("goQuizBtn").onclick = () => {
+      document.querySelector('[data-tab="quiz"]').click();
     };
 
-    // List
-    const searchInput = document.getElementById("searchInput");
-    searchInput.oninput = renderList;
-
-    function renderList() {
-      const q = searchInput.value.trim().toLowerCase();
-      const list = WORDS.filter(w => {
-        const catOk = activeCat === "전체" || w.cat === activeCat;
-        const qOk = !q || w.en.toLowerCase().includes(q) || w.ko.includes(q) || w.read.includes(q);
-        return catOk && qOk;
-      });
-
+    // Review (오늘까지 열린 단어만)
+    function renderReview() {
+      const unlocked = getUnlockedWords();
+      document.getElementById("reviewSub").textContent = `지금까지 열린 ${unlocked.length}개만 보여드려요`;
       const wrap = document.getElementById("wordList");
       wrap.innerHTML = "";
-      list.forEach(w => {
-        const isDone = doneIds.has(w.id);
+      unlocked.slice().reverse().forEach(w => {
+        const isDone = state.doneIds.includes(w.id);
         const item = document.createElement("div");
         item.className = "list-item" + (isDone ? " is-done" : "");
         item.innerHTML = `
@@ -851,35 +853,21 @@
             <div class="list-ko">${w.ko}</div>
             <div class="list-phrase">${w.pEn} · ${w.pKo}</div>
           </div>
-          <div class="list-btns">
-            <button class="icon-btn" type="button" aria-label="발음">🔊</button>
-            <button class="icon-btn ${isDone ? "done" : ""}" type="button" aria-label="완료">✓</button>
-          </div>
+          <button class="icon-btn" type="button" aria-label="발음">🔊</button>
         `;
-        const [speakBtn, checkBtn] = item.querySelectorAll("button");
-        speakBtn.onclick = () => speak(w.en);
-        checkBtn.onclick = () => {
-          const adding = !doneIds.has(w.id);
-          if (adding) doneIds.add(w.id);
-          else doneIds.delete(w.id);
-          recordTodayProgress(adding);
-          saveDone();
-          renderList();
-          renderCard();
-        };
+        item.querySelector("button").onclick = () => speak(w.en);
         wrap.appendChild(item);
       });
     }
 
-    // Quiz
+    // Quiz (오늘의 5단어로만!)
     let quizList = [];
     let quizIdx = 0;
     let quizScore = 0;
     let quizAnswered = false;
 
     function startQuiz() {
-      const pool = activeCat === "전체" ? WORDS : WORDS.filter(w => w.cat === activeCat);
-      quizList = [...pool].sort(() => Math.random() - 0.5).slice(0, Math.min(10, pool.length));
+      quizList = [...getTodayWords()].sort(() => Math.random() - 0.5);
       quizIdx = 0;
       quizScore = 0;
       renderQuiz();
@@ -925,7 +913,7 @@
           }
           const nextBtn = document.getElementById("quizNextBtn");
           nextBtn.style.display = "block";
-          nextBtn.textContent = quizIdx + 1 < quizList.length ? "다음 문제 →" : "새 퀴즈 풀기 ↻";
+          nextBtn.textContent = quizIdx + 1 < quizList.length ? "다음 문제 →" : "오늘 퀴즈 다시 풀기 ↻";
         };
         optWrap.appendChild(btn);
       });
@@ -940,10 +928,7 @@
       }
     };
 
-    updateProgress();
-    renderCats();
-    renderCard();
-    renderList();
+    renderToday();
   </script>
 </body>
 </html>
