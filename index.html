@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>왕왕초보 하루 5단어</title>
+  <meta name="theme-color" content="#f6f7fb" />
+  <title>하루 딱 5단어 · 일상 영어</title>
   <style>
     :root {
       --bg: #f6f7fb;
@@ -17,6 +18,8 @@
       --green-soft: #dcfce7;
       --red: #ef4444;
       --red-soft: #fee2e2;
+      --violet: #7c3aed;
+      --violet-soft: #f3ecff;
       --border: #e5e8eb;
       --shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
       --radius: 20px;
@@ -35,6 +38,7 @@
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
+      -webkit-text-size-adjust: 100%;
     }
 
     .app {
@@ -45,42 +49,104 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
 
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 4px 2px;
+      padding: 2px 2px 0;
+      gap: 10px;
     }
 
     .title-wrap h1 {
       margin: 0;
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 800;
       letter-spacing: -0.02em;
     }
 
     .title-wrap p {
       margin: 3px 0 0;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--sub);
+      line-height: 1.35;
     }
 
     .progress-pill {
       background: var(--primary-soft);
       color: var(--primary);
-      font-weight: 700;
+      font-weight: 800;
       font-size: 13px;
       padding: 7px 12px;
       border-radius: 999px;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .progress-pill.done {
       background: var(--green-soft);
       color: var(--green);
+    }
+
+    /* 난이도 선택 */
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      background: #eceff4;
+      padding: 4px;
+      border-radius: 14px;
+    }
+
+    .level-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 4px;
+      border-radius: 11px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--sub);
+      cursor: pointer;
+      line-height: 1.2;
+      transition: all 0.15s ease;
+    }
+
+    .level-btn small {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 2px;
+      color: var(--muted);
+      letter-spacing: -0.02em;
+    }
+
+    .level-btn.active {
+      background: var(--card);
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    }
+
+    .level-btn.active[data-level="2"] {
+      color: var(--primary);
+    }
+
+    .level-btn.active[data-level="3"] {
+      color: var(--violet);
+    }
+
+    .level-btn.active small {
+      color: inherit;
+      opacity: 0.75;
+    }
+
+    .level-desc {
+      font-size: 12px;
+      color: var(--sub);
+      line-height: 1.45;
+      padding: 0 4px;
+      margin-top: -4px;
     }
 
     .tabs {
@@ -97,7 +163,7 @@
       background: transparent;
       padding: 10px 6px;
       border-radius: 11px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--sub);
       cursor: pointer;
@@ -113,7 +179,7 @@
     .panel {
       display: none;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       flex: 1;
     }
 
@@ -142,6 +208,7 @@
       font-size: 12px;
       color: var(--sub);
       margin-top: 2px;
+      line-height: 1.4;
     }
 
     .day-badge {
@@ -164,13 +231,14 @@
       background: var(--card);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 24px 20px;
-      min-height: 310px;
+      padding: 22px 18px;
+      min-height: 300px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       cursor: pointer;
       user-select: none;
+      -webkit-user-select: none;
       border: 1px solid rgba(0, 0, 0, 0.03);
     }
 
@@ -181,6 +249,7 @@
       font-size: 12px;
       color: var(--muted);
       font-weight: 600;
+      gap: 8px;
     }
 
     .badge-cat {
@@ -188,30 +257,47 @@
       color: var(--sub);
       padding: 4px 10px;
       border-radius: 999px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 62%;
     }
 
     .card-center {
       text-align: center;
-      padding: 18px 4px;
+      padding: 14px 2px;
     }
 
     .word-en {
-      font-size: 40px;
+      font-size: 38px;
       font-weight: 800;
       letter-spacing: -0.02em;
       margin: 0;
       word-break: break-word;
+      line-height: 1.2;
+    }
+
+    .word-en.small {
+      font-size: 27px;
+      line-height: 1.3;
+    }
+
+    .word-en.tiny {
+      font-size: 21px;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
     }
 
     .word-read {
       margin: 8px 0 0;
-      font-size: 16px;
+      font-size: 14px;
       color: var(--sub);
       font-weight: 600;
+      line-height: 1.4;
     }
 
     .speak-btn {
-      margin: 16px auto 0;
+      margin: 14px auto 0;
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -230,8 +316,8 @@
     }
 
     .meaning-box {
-      margin-top: 18px;
-      padding-top: 16px;
+      margin-top: 16px;
+      padding-top: 14px;
       border-top: 1px dashed var(--border);
       display: none;
     }
@@ -241,10 +327,11 @@
     }
 
     .word-ko {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 800;
       color: var(--primary);
       margin: 0;
+      line-height: 1.35;
     }
 
     .phrase-box {
@@ -253,17 +340,20 @@
       border-radius: 12px;
       padding: 10px 12px;
       font-size: 14px;
+      text-align: left;
     }
 
     .phrase-en {
       font-weight: 700;
       color: var(--text);
+      line-height: 1.4;
     }
 
     .phrase-ko {
       margin-top: 3px;
       color: var(--sub);
       font-size: 13px;
+      line-height: 1.4;
     }
 
     .tap-hint {
@@ -279,13 +369,13 @@
     .card-actions {
       display: grid;
       grid-template-columns: 1fr 1.4fr 1fr;
-      gap: 10px;
+      gap: 8px;
     }
 
     .btn {
       border: none;
       border-radius: 14px;
-      padding: 14px 10px;
+      padding: 14px 8px;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
@@ -312,12 +402,12 @@
       background: var(--card);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 36px 22px;
+      padding: 32px 20px;
       text-align: center;
       display: none;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .done-screen.show {
@@ -325,12 +415,12 @@
     }
 
     .done-emoji {
-      font-size: 52px;
+      font-size: 50px;
       line-height: 1;
     }
 
     .done-title {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 800;
       margin: 0;
     }
@@ -382,11 +472,11 @@
     .list-item {
       background: var(--card);
       border-radius: 16px;
-      padding: 14px 16px;
+      padding: 14px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
       border: 1px solid rgba(0, 0, 0, 0.04);
     }
 
@@ -403,31 +493,35 @@
     .list-top {
       display: flex;
       align-items: baseline;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
     .list-en {
-      font-size: 19px;
+      font-size: 17px;
       font-weight: 800;
+      line-height: 1.3;
+      word-break: break-word;
     }
 
     .list-read {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--muted);
     }
 
     .list-ko {
       margin-top: 4px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--primary);
+      line-height: 1.35;
     }
 
     .list-phrase {
       margin-top: 4px;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--sub);
+      line-height: 1.4;
     }
 
     .icon-btn {
@@ -443,49 +537,75 @@
       flex-shrink: 0;
     }
 
+    .empty-note {
+      background: var(--card);
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+      padding: 22px 16px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--sub);
+      line-height: 1.5;
+    }
+
     /* Quiz */
     .quiz-card {
       background: var(--card);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 22px 18px;
+      padding: 20px 16px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     .quiz-q {
       text-align: center;
-      padding: 10px 0;
+      padding: 6px 0;
     }
 
     .quiz-word {
-      font-size: 34px;
+      font-size: 30px;
       font-weight: 800;
       margin: 0;
+      word-break: break-word;
+      line-height: 1.25;
+    }
+
+    .quiz-word.small {
+      font-size: 22px;
+      line-height: 1.35;
+    }
+
+    .quiz-word.tiny {
+      font-size: 18px;
+      line-height: 1.4;
     }
 
     .quiz-read {
       margin-top: 6px;
-      font-size: 15px;
+      font-size: 13px;
       color: var(--sub);
+      line-height: 1.4;
     }
 
     .quiz-options {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
     }
 
     .quiz-opt {
       border: 1px solid var(--border);
       background: #fff;
       border-radius: 14px;
-      padding: 14px 16px;
-      font-size: 16px;
+      padding: 13px 14px;
+      font-size: 15px;
       font-weight: 700;
       text-align: left;
       cursor: pointer;
+      line-height: 1.4;
+      color: var(--text);
     }
 
     .quiz-opt.correct {
@@ -502,9 +622,18 @@
 
     .quiz-feedback {
       text-align: center;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       min-height: 20px;
+      line-height: 1.5;
+    }
+
+    .foot-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 4px 10px 0;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -518,10 +647,18 @@
       <div class="progress-pill" id="progressPill">0 / 5</div>
     </header>
 
+    <!-- 난이도 선택 -->
+    <div class="levels" id="levelTabs">
+      <button class="level-btn" type="button" data-level="1">Lv.1<small>기초 단어</small></button>
+      <button class="level-btn active" type="button" data-level="2">Lv.2<small>일상 실전</small></button>
+      <button class="level-btn" type="button" data-level="3">Lv.3<small>실전 회화</small></button>
+    </div>
+    <div class="level-desc" id="levelDesc"></div>
+
     <div class="tabs">
       <button class="tab-btn active" data-tab="today">오늘의 5단어</button>
       <button class="tab-btn" data-tab="quiz">오늘 퀴즈</button>
-      <button class="tab-btn" data-tab="review">배운 단어</button>
+      <button class="tab-btn" data-tab="review">배운 표현</button>
     </div>
 
     <!-- 오늘의 5단어 -->
@@ -534,23 +671,23 @@
         <div class="day-badge" id="dayBadge">0 / 5 완료</div>
       </div>
 
-      <div id="todayStudyWrap" style="display:flex;flex-direction:column;gap:14px;">
+      <div id="todayStudyWrap" style="display:flex;flex-direction:column;gap:12px;">
         <div class="flashcard" id="flashcard">
           <div class="card-top">
-            <span class="badge-cat" id="cardCat">기본 동사</span>
+            <span class="badge-cat" id="cardCat">요일</span>
             <span id="cardCounter">1 / 5</span>
           </div>
 
           <div class="card-center">
-            <p class="word-en" id="cardEn">go</p>
-            <p class="word-read" id="cardRead">[고]</p>
+            <p class="word-en" id="cardEn">Tuesday</p>
+            <p class="word-read" id="cardRead">[튜즈데이]</p>
             <button class="speak-btn" id="cardSpeak" type="button">🔊 발음 듣기</button>
 
             <div class="meaning-box">
-              <p class="word-ko" id="cardKo">가다</p>
+              <p class="word-ko" id="cardKo">화요일</p>
               <div class="phrase-box">
-                <div class="phrase-en" id="cardPhraseEn">Let's go.</div>
-                <div class="phrase-ko" id="cardPhraseKo">가자.</div>
+                <div class="phrase-en" id="cardPhraseEn">See you on Tuesday.</div>
+                <div class="phrase-ko" id="cardPhraseKo">화요일에 봐요.</div>
               </div>
             </div>
           </div>
@@ -569,12 +706,13 @@
         <div class="done-emoji">🎉</div>
         <h2 class="done-title">오늘 할당량 끝!</h2>
         <p class="done-desc" id="doneDesc">
-          오늘 5단어 다 끝내셨어요 👏<br />
-          더 안 하셔도 되고, 내일 오시면 다음 5단어가 자동으로 열려요.
+          오늘 5개 다 끝내셨어요 👏<br />
+          더 안 하셔도 되고, 내일 오시면 다음 5개가 자동으로 열려요.
         </p>
         <div class="done-btns">
           <button class="btn-primary-small" id="goQuizBtn" type="button">오늘 5개 퀴즈 풀기</button>
-          <button class="btn-soft" id="reopenTodayBtn" type="button">오늘 단어 다시 보기</button>
+          <button class="btn-soft" id="reopenTodayBtn" type="button">오늘 것 다시 보기</button>
+          <button class="btn-soft" id="nextLevelBtn" type="button">다른 난이도 보기</button>
         </div>
       </div>
     </section>
@@ -587,8 +725,8 @@
           <span id="quizScore">맞힌 개수: 0</span>
         </div>
         <div class="quiz-q">
-          <p class="quiz-word" id="quizWord">go</p>
-          <p class="quiz-read" id="quizRead">[고]</p>
+          <p class="quiz-word" id="quizWord">Tuesday</p>
+          <p class="quiz-read" id="quizRead">[튜즈데이]</p>
           <button class="speak-btn" id="quizSpeak" type="button">🔊 발음 듣기</button>
         </div>
         <div class="quiz-options" id="quizOptions"></div>
@@ -597,72 +735,224 @@
       </div>
     </section>
 
-    <!-- 배운 단어 (오늘까지 열린 것만) -->
+    <!-- 배운 표현 (오늘까지 열린 것만) -->
     <section class="panel" id="panel-review">
       <div class="day-banner">
         <div>
-          <div class="day-title">지금까지 연 단어</div>
+          <div class="day-title">지금까지 연 것</div>
           <div class="day-sub" id="reviewSub">오늘치까지만 보여드려요 (부담 X)</div>
         </div>
       </div>
       <div class="word-list" id="wordList"></div>
     </section>
+
+    <div class="foot-note">난이도를 바꾸면 그 난이도의 진행도가 따로 저장돼요 · 매일 자정에 다음 5개</div>
   </div>
 
   <script>
-    const WORDS = [
-      // Day 1 (5)
-      { id: 1, cat: "기본 동사", en: "go", read: "고", ko: "가다", pEn: "Let's go.", pKo: "가자." },
-      { id: 2, cat: "기본 동사", en: "come", read: "컴", ko: "오다", pEn: "Come here.", pKo: "이리 와." },
-      { id: 3, cat: "기본 동사", en: "eat", read: "이트", ko: "먹다", pEn: "Eat this.", pKo: "이거 먹어." },
-      { id: 4, cat: "기본 동사", en: "drink", read: "드링크", ko: "마시다", pEn: "Drink water.", pKo: "물 마셔." },
-      { id: 5, cat: "기본 동사", en: "wait", read: "웨이트", ko: "기다리다", pEn: "Wait here.", pKo: "여기서 기다려." },
+    /* ============================
+       단어 데이터
+       Lv.1 기초 (35) · Lv.2 일상 실전 (60) · Lv.3 실전 회화 (40)
+       ============================ */
+    const LEVELS = {
+      "1": {
+        label: "Lv.1",
+        name: "기초 단어",
+        desc: "go·eat·water처럼 제일 기본 단어예요. 예전 왕초보 목록 그대로!",
+        words: [
+          // Day 1
+          { cat: "기본 동사", en: "go", read: "고", ko: "가다", pEn: "Let's go.", pKo: "가자." },
+          { cat: "기본 동사", en: "come", read: "컴", ko: "오다", pEn: "Come here.", pKo: "이리 와." },
+          { cat: "기본 동사", en: "eat", read: "이트", ko: "먹다", pEn: "Eat this.", pKo: "이거 먹어." },
+          { cat: "기본 동사", en: "drink", read: "드링크", ko: "마시다", pEn: "Drink water.", pKo: "물 마셔." },
+          { cat: "기본 동사", en: "wait", read: "웨이트", ko: "기다리다", pEn: "Wait here.", pKo: "여기서 기다려." },
+          // Day 2
+          { cat: "기본 동사", en: "see", read: "씨", ko: "보다", pEn: "See you.", pKo: "또 봐." },
+          { cat: "기본 동사", en: "buy", read: "바이", ko: "사다", pEn: "Buy this.", pKo: "이거 사자." },
+          { cat: "기본 동사", en: "pay", read: "페이", ko: "결제하다 / 내다", pEn: "I will pay.", pKo: "내가 낼게." },
+          { cat: "기본 동사", en: "sleep", read: "슬립", ko: "자다", pEn: "Go to sleep.", pKo: "자러 가자." },
+          { cat: "기본 동사", en: "rest", read: "레스트", ko: "쉬다", pEn: "Rest now.", pKo: "지금 쉬어." },
+          // Day 3
+          { cat: "카페 · 식당", en: "water", read: "워터", ko: "물", pEn: "Water, please.", pKo: "물 주세요." },
+          { cat: "카페 · 식당", en: "coffee", read: "커피", ko: "커피", pEn: "One coffee.", pKo: "커피 한 잔." },
+          { cat: "카페 · 식당", en: "order", read: "오더", ko: "주문하다", pEn: "Order now.", pKo: "지금 주문하자." },
+          { cat: "카페 · 식당", en: "ice", read: "아이스", ko: "얼음 / 차가운", pEn: "Less ice.", pKo: "얼음 적게." },
+          { cat: "카페 · 식당", en: "hot", read: "핫", ko: "뜨거운", pEn: "Hot coffee.", pKo: "따뜻한 커피." },
+          // Day 4
+          { cat: "기분 · 상태", en: "good", read: "굿", ko: "좋은", pEn: "Sounds good.", pKo: "좋네." },
+          { cat: "기분 · 상태", en: "bad", read: "배드", ko: "나쁜 / 안 좋은", pEn: "Not bad.", pKo: "나쁘지 않아." },
+          { cat: "기분 · 상태", en: "tired", read: "타이어드", ko: "피곤한", pEn: "I'm tired.", pKo: "나 피곤해." },
+          { cat: "기분 · 상태", en: "hungry", read: "헝그리", ko: "배고픈", pEn: "I'm hungry.", pKo: "배고파." },
+          { cat: "기분 · 상태", en: "thanks", read: "땡스", ko: "고마워요", pEn: "Thanks a lot.", pKo: "정말 고마워요." },
+          // Day 5
+          { cat: "집 · 생활", en: "home", read: "홈", ko: "집", pEn: "Go home.", pKo: "집에 가자." },
+          { cat: "집 · 생활", en: "room", read: "룸", ko: "방", pEn: "My room.", pKo: "내 방." },
+          { cat: "집 · 생활", en: "phone", read: "폰", ko: "휴대폰", pEn: "My phone.", pKo: "내 휴대폰." },
+          { cat: "집 · 생활", en: "bag", read: "백", ko: "가방", pEn: "In my bag.", pKo: "내 가방 안에." },
+          { cat: "집 · 생활", en: "today", read: "투데이", ko: "오늘", pEn: "Today is good.", pKo: "오늘 좋다." },
+          // Day 6
+          { cat: "쇼핑 · 여행", en: "price", read: "프라이스", ko: "가격", pEn: "Good price.", pKo: "가격 좋다." },
+          { cat: "쇼핑 · 여행", en: "cheap", read: "칩", ko: "싼 / 저렴한", pEn: "It's cheap.", pKo: "이거 싸다." },
+          { cat: "쇼핑 · 여행", en: "card", read: "카드", ko: "카드", pEn: "By card.", pKo: "카드로요." },
+          { cat: "쇼핑 · 여행", en: "here", read: "히어", ko: "여기", pEn: "Right here.", pKo: "바로 여기." },
+          { cat: "쇼핑 · 여행", en: "station", read: "스테이션", ko: "역", pEn: "Subway station.", pKo: "지하철역." },
+          // Day 7
+          { cat: "기본 동사", en: "need", read: "니드", ko: "필요하다", pEn: "I need this.", pKo: "이거 필요해." },
+          { cat: "기본 동사", en: "like", read: "라이크", ko: "좋아하다", pEn: "I like it.", pKo: "이거 좋아." },
+          { cat: "기분 · 상태", en: "happy", read: "해피", ko: "행복한 / 기쁜", pEn: "I'm happy.", pKo: "나 기뻐." },
+          { cat: "기분 · 상태", en: "busy", read: "비지", ko: "바쁜", pEn: "I'm busy.", pKo: "나 바빠." },
+          { cat: "기분 · 상태", en: "sorry", read: "쏘리", ko: "미안한", pEn: "I'm sorry.", pKo: "미안해요." }
+        ]
+      },
 
-      // Day 2 (5)
-      { id: 6, cat: "기본 동사", en: "see", read: "씨", ko: "보다", pEn: "See you.", pKo: "또 봐." },
-      { id: 7, cat: "기본 동사", en: "buy", read: "바이", ko: "사다", pEn: "Buy this.", pKo: "이거 사자." },
-      { id: 8, cat: "기본 동사", en: "pay", read: "페이", ko: "결제하다 / 내다", pEn: "I will pay.", pKo: "내가 낼게." },
-      { id: 9, cat: "기본 동사", en: "sleep", read: "슬립", ko: "자다", pEn: "Go to sleep.", pKo: "자러 가자." },
-      { id: 10, cat: "기본 동사", en: "rest", read: "레스트", ko: "쉬다", pEn: "Rest now.", pKo: "지금 쉬어." },
+      "2": {
+        label: "Lv.2",
+        name: "일상 실전",
+        desc: "숫자·달력·시간·가격·일정 — 매일 쓰는데 막상 영어로는 헷갈리는 것들",
+        words: [
+          // Day 1 · 요일
+          { cat: "요일", en: "Tuesday", read: "튜즈데이", ko: "화요일", pEn: "See you on Tuesday.", pKo: "화요일에 봐요." },
+          { cat: "요일", en: "Wednesday", read: "웬즈데이", ko: "수요일", pEn: "It's Wednesday today.", pKo: "오늘은 수요일이에요." },
+          { cat: "요일", en: "Thursday", read: "써즈데이", ko: "목요일", pEn: "Thursday works for me.", pKo: "전 목요일 괜찮아요." },
+          { cat: "요일", en: "Friday", read: "프라이데이", ko: "금요일", pEn: "How about Friday?", pKo: "금요일 어때요?" },
+          { cat: "요일", en: "Saturday", read: "새터데이", ko: "토요일", pEn: "Are you free on Saturday?", pKo: "토요일에 시간 돼요?" },
+          // Day 2 · 월
+          { cat: "월", en: "February", read: "페브루에리", ko: "2월", pEn: "My birthday is in February.", pKo: "내 생일은 2월이에요." },
+          { cat: "월", en: "April", read: "에이프럴", ko: "4월", pEn: "It rains a lot in April.", pKo: "4월엔 비가 많이 와요." },
+          { cat: "월", en: "August", read: "어거스트", ko: "8월", pEn: "August is really hot.", pKo: "8월은 진짜 더워요." },
+          { cat: "월", en: "October", read: "악토버", ko: "10월", pEn: "Let's go in October.", pKo: "10월에 가요." },
+          { cat: "월", en: "December", read: "디셈버", ko: "12월", pEn: "I'm busy in December.", pKo: "12월엔 바빠요." },
+          // Day 3 · 날짜 (서수 1)
+          { cat: "날짜 (서수)", en: "1st", read: "퍼스트", ko: "1일 / 첫 번째", pEn: "It's May 1st.", pKo: "5월 1일이에요." },
+          { cat: "날짜 (서수)", en: "2nd", read: "세컨드", ko: "2일 / 두 번째", pEn: "See you on the 2nd.", pKo: "2일에 봐요." },
+          { cat: "날짜 (서수)", en: "3rd", read: "써드", ko: "3일 / 세 번째", pEn: "It's March 3rd.", pKo: "3월 3일이에요." },
+          { cat: "날짜 (서수)", en: "9th", read: "나인스", ko: "9일 / 아홉 번째", pEn: "the 9th of June", pKo: "6월 9일" },
+          { cat: "날짜 (서수)", en: "15th", read: "피프틴스", ko: "15일 / 열다섯 번째", pEn: "Let's meet on the 15th.", pKo: "15일에 만나요." },
+          // Day 4 · 날짜 (서수 2)
+          { cat: "날짜 (서수)", en: "12th", read: "트웰프스", ko: "12일", pEn: "December 12th", pKo: "12월 12일" },
+          { cat: "날짜 (서수)", en: "20th", read: "트웬티어스", ko: "20일", pEn: "I'll pay on the 20th.", pKo: "20일에 낼게요." },
+          { cat: "날짜 (서수)", en: "21st", read: "트웬티펄스트", ko: "21일", pEn: "January 21st", pKo: "1월 21일" },
+          { cat: "날짜 (서수)", en: "30th", read: "써리어스", ko: "30일", pEn: "It's due on the 30th.", pKo: "30일이 마감이에요." },
+          { cat: "날짜 (서수)", en: "31st", read: "써리펄스트", ko: "31일", pEn: "The last day is the 31st.", pKo: "마지막 날은 31일이에요." },
+          // Day 5 · 시각
+          { cat: "시각", en: "noon", read: "눈", ko: "정오 12시", pEn: "Let's meet at noon.", pKo: "12시에 만나요." },
+          { cat: "시각", en: "midnight", read: "미드나이트", ko: "자정 12시", pEn: "I'll finish it by midnight.", pKo: "자정까지 끝낼게요." },
+          { cat: "시각", en: "o'clock", read: "어클락", ko: "~시 정각", pEn: "It's three o'clock.", pKo: "3시예요." },
+          { cat: "시각", en: "a.m.", read: "에이엠", ko: "오전", pEn: "The store opens at 9 a.m.", pKo: "가게는 오전 9시에 열어요." },
+          { cat: "시각", en: "p.m.", read: "피엠", ko: "오후", pEn: "I'm off at 6 p.m.", pKo: "6시에 퇴근해요." },
+          // Day 6 · 시간 표현
+          { cat: "시간 표현", en: "half past", read: "하프 패스트", ko: "~시 30분", pEn: "half past six", pKo: "6시 30분" },
+          { cat: "시간 표현", en: "quarter past", read: "쿼터 패스트", ko: "~시 15분", pEn: "quarter past four", pKo: "4시 15분" },
+          { cat: "시간 표현", en: "quarter to", read: "쿼터 투", ko: "~시 15분 전", pEn: "quarter to nine", pKo: "9시 15분 전" },
+          { cat: "시간 표현", en: "sharp", read: "샤프", ko: "정각에 (늦지 않게)", pEn: "Please come at 10 sharp.", pKo: "10시 정각에 와 주세요." },
+          { cat: "시간 표현", en: "around", read: "어라운드", ko: "~쯤", pEn: "I'll be there around 5.", pKo: "5시쯤 도착할게요." },
+          // Day 7 · 시간 · 기간
+          { cat: "시간 · 기간", en: "in 10 minutes", read: "인 텐 미닛츠", ko: "10분 후에", pEn: "I'll be there in 10 minutes.", pKo: "10분 뒤에 갈게요." },
+          { cat: "시간 · 기간", en: "on time", read: "온 타임", ko: "제시간에", pEn: "Please come on time.", pKo: "제시간에 와 주세요." },
+          { cat: "시간 · 기간", en: "late", read: "레이트", ko: "늦은 / 늦게", pEn: "Sorry I'm late.", pKo: "늦어서 미안해요." },
+          { cat: "시간 · 기간", en: "early", read: "얼리", ko: "이른 / 일찍", pEn: "I'm a little early.", pKo: "나 좀 일찍 왔어." },
+          { cat: "시간 · 기간", en: "for an hour", read: "포 어 아워", ko: "한 시간 동안", pEn: "I waited for an hour.", pKo: "한 시간 기다렸어요." },
+          // Day 8 · 숫자 헷갈림
+          { cat: "숫자", en: "fifteen", read: "피프틴", ko: "15", pEn: "It's fifteen minutes away.", pKo: "15분 거리예요." },
+          { cat: "숫자", en: "fifty", read: "피프티", ko: "50", pEn: "It's fifty thousand won.", pKo: "5만 원이에요." },
+          { cat: "숫자", en: "thirteen", read: "써틴", ko: "13", pEn: "Thirteen people came.", pKo: "13명이 왔어요." },
+          { cat: "숫자", en: "thirty", read: "써티", ko: "30", pEn: "It takes thirty minutes.", pKo: "30분 걸려요." },
+          { cat: "숫자", en: "eighty", read: "에이티", ko: "80", pEn: "Eighty percent", pKo: "80퍼센트" },
+          // Day 9 · 큰 수 · 가격
+          { cat: "큰 수 · 가격", en: "hundred", read: "헌드레드", ko: "100", pEn: "Two hundred won", pKo: "200원" },
+          { cat: "큰 수 · 가격", en: "thousand", read: "사우전드", ko: "1,000", pEn: "Three thousand won", pKo: "3,000원" },
+          { cat: "큰 수 · 가격", en: "ten thousand", read: "텐 사우전드", ko: "10,000", pEn: "It's ten thousand won.", pKo: "만 원이에요." },
+          { cat: "큰 수 · 가격", en: "half price", read: "하프 프라이스", ko: "반값", pEn: "It was half price.", pKo: "반값이었어요." },
+          { cat: "큰 수 · 가격", en: "for free", read: "포 프리", ko: "무료로", pEn: "It's for free.", pKo: "무료예요." },
+          // Day 10 · 빈도
+          { cat: "빈도", en: "once a week", read: "원스 어 위크", ko: "일주일에 한 번", pEn: "I go once a week.", pKo: "일주일에 한 번 가요." },
+          { cat: "빈도", en: "twice", read: "트와이스", ko: "두 번", pEn: "Twice a month", pKo: "한 달에 두 번" },
+          { cat: "빈도", en: "every day", read: "에브리 데이", ko: "매일", pEn: "I walk every day.", pKo: "매일 걸어요." },
+          { cat: "빈도", en: "every other day", read: "에브리 아더 데이", ko: "이틀에 한 번", pEn: "Take it every other day.", pKo: "이틀에 한 번 드세요." },
+          { cat: "빈도", en: "once in a while", read: "원스 인 어 와일", ko: "가끔", pEn: "I eat out once in a while.", pKo: "가끔 외식해요." },
+          // Day 11 · 달력 · 일정
+          { cat: "달력 · 일정", en: "weekend", read: "위켄드", ko: "주말", pEn: "How's your weekend?", pKo: "주말 어때요?" },
+          { cat: "달력 · 일정", en: "weekday", read: "위크데이", ko: "평일", pEn: "I work on weekdays.", pKo: "평일엔 일해요." },
+          { cat: "달력 · 일정", en: "next week", read: "넥스트 위크", ko: "다음 주", pEn: "See you next week.", pKo: "다음 주에 봐요." },
+          { cat: "달력 · 일정", en: "the day after tomorrow", read: "더 데이 애프터 투모로우", ko: "모레", pEn: "Let's meet the day after tomorrow.", pKo: "모레 만나요." },
+          { cat: "달력 · 일정", en: "last week", read: "라스트 위크", ko: "지난주", pEn: "I was sick last week.", pKo: "지난주에 아팠어요." },
+          // Day 12 · 일정 · 마감
+          { cat: "일정 · 마감", en: "schedule", read: "스케줄", ko: "일정", pEn: "Check your schedule.", pKo: "일정 확인해 봐." },
+          { cat: "일정 · 마감", en: "appointment", read: "어포인트먼트", ko: "약속 · 예약", pEn: "I have an appointment at 2.", pKo: "2시에 약속이 있어요." },
+          { cat: "일정 · 마감", en: "deadline", read: "데드라인", ko: "마감", pEn: "The deadline is Friday.", pKo: "마감은 금요일이에요." },
+          { cat: "일정 · 마감", en: "by Friday", read: "바이 프라이데이", ko: "금요일까지", pEn: "Send it by Friday.", pKo: "금요일까지 보내 주세요." },
+          { cat: "일정 · 마감", en: "reschedule", read: "리스케줄", ko: "일정을 바꾸다", pEn: "Can we reschedule?", pKo: "일정을 바꿀 수 있을까요?" }
+        ]
+      },
 
-      // Day 3 (5)
-      { id: 11, cat: "카페 · 식당", en: "water", read: "워터", ko: "물", pEn: "Water, please.", pKo: "물 주세요." },
-      { id: 12, cat: "카페 · 식당", en: "coffee", read: "커피", ko: "커피", pEn: "One coffee.", pKo: "커피 한 잔." },
-      { id: 13, cat: "카페 · 식당", en: "order", read: "오더", ko: "주문하다", pEn: "Order now.", pKo: "지금 주문하자." },
-      { id: 14, cat: "카페 · 식당", en: "ice", read: "아이스", ko: "얼음 / 차가운", pEn: "Less ice.", pKo: "얼음 적게." },
-      { id: 15, cat: "카페 · 식당", en: "hot", read: "핫", ko: "뜨거운", pEn: "Hot coffee.", pKo: "따뜻한 커피." },
+      "3": {
+        label: "Lv.3",
+        name: "실전 회화",
+        desc: "숫자·시간·달력 표현을 실제 상황에서 바로 쓰는 짧은 문장이에요",
+        words: [
+          // Day 1 · 가게 · 영업시간
+          { cat: "가게 · 영업시간", en: "What time does it open?", read: "왓 타임 더즈 잇 오픈", ko: "몇 시에 문 열어요?", pEn: "It opens at 10.", pKo: "10시에 열어요." },
+          { cat: "가게 · 영업시간", en: "What time does it close?", read: "왓 타임 더즈 잇 클로즈", ko: "몇 시에 닫아요?", pEn: "It closes at 9.", pKo: "9시에 닫아요." },
+          { cat: "가게 · 영업시간", en: "Is it open on Sunday?", read: "이즈 잇 오픈 온 선데이", ko: "일요일에도 열어요?", pEn: "No, it's closed.", pKo: "아니요, 문 닫아요." },
+          { cat: "가게 · 영업시간", en: "Are you open now?", read: "아 유 오픈 나우", ko: "지금 영업 중이에요?", pEn: "Yes, we're open.", pKo: "네, 열었어요." },
+          { cat: "가게 · 영업시간", en: "What time do you close today?", read: "왓 타임 두 유 클로즈 투데이", ko: "오늘 몇 시에 닫아요?", pEn: "We close at 8.", pKo: "8시에 닫아요." },
+          // Day 2 · 가격 · 결제
+          { cat: "가격 · 결제", en: "How much is this?", read: "하우 머치 이즈 디스", ko: "이거 얼마예요?", pEn: "It's fifteen thousand won.", pKo: "1만 5천 원이에요." },
+          { cat: "가격 · 결제", en: "That's too expensive.", read: "댓츠 투 익스펜시브", ko: "너무 비싸요.", pEn: "This one is cheaper.", pKo: "이게 더 싸요." },
+          { cat: "가격 · 결제", en: "Can I pay by card?", read: "캔 아이 페이 바이 카드", ko: "카드로 낼 수 있어요?", pEn: "Yes, of course.", pKo: "네, 그럼요." },
+          { cat: "가격 · 결제", en: "Can I get a discount?", read: "캔 아이 겟 어 디스카운트", ko: "깎아 주실 수 있어요?", pEn: "Sorry, no discount.", pKo: "죄송해요, 안 돼요." },
+          { cat: "가격 · 결제", en: "Two, please.", read: "투, 플리즈", ko: "두 개 주세요.", pEn: "Here you are.", pKo: "여기 있어요." },
+          // Day 3 · 시간 · 이동
+          { cat: "시간 · 이동", en: "How long does it take?", read: "하우 롱 더즈 잇 테이크", ko: "얼마나 걸려요?", pEn: "It takes 20 minutes.", pKo: "20분 걸려요." },
+          { cat: "시간 · 이동", en: "It takes 20 minutes.", read: "잇 테이크스 트웬티 미닛츠", ko: "20분 걸려요.", pEn: "It's not far.", pKo: "멀지 않아요." },
+          { cat: "시간 · 이동", en: "I'll be there in 10 minutes.", read: "아일 비 데어 인 텐 미닛츠", ko: "10분 안에 도착해요.", pEn: "Okay, see you.", pKo: "알겠어요, 봐요." },
+          { cat: "시간 · 이동", en: "I'm running late.", read: "임 러닝 레이트", ko: "늦어지고 있어요.", pEn: "No problem.", pKo: "괜찮아요." },
+          { cat: "시간 · 이동", en: "I'm almost there.", read: "임 올모스트 데어", ko: "거의 다 왔어요.", pEn: "Take your time.", pKo: "천천히 오세요." },
+          // Day 4 · 약속 · 스케줄
+          { cat: "약속 · 스케줄", en: "Let's meet at 3:30.", read: "렛츠 미트 앳 쓰리 써티", ko: "3시 30분에 만나요.", pEn: "Sounds good.", pKo: "좋아요." },
+          { cat: "약속 · 스케줄", en: "Are you free on Tuesday?", read: "아 유 프리 온 튜즈데이", ko: "화요일 시간 괜찮아요?", pEn: "I'm free in the afternoon.", pKo: "오후엔 괜찮아요." },
+          { cat: "약속 · 스케줄", en: "Can we move it to Friday?", read: "캔 위 무브 잇 투 프라이데이", ko: "금요일로 옮길 수 있을까요?", pEn: "Friday works for me.", pKo: "전 금요일 괜찮아요." },
+          { cat: "약속 · 스케줄", en: "Let's do it next week.", read: "렛츠 두 잇 넥스트 위크", ko: "다음 주에 해요.", pEn: "Okay, next week.", pKo: "좋아요, 다음 주에." },
+          { cat: "약속 · 스케줄", en: "I'll check my schedule.", read: "아일 체크 마이 스케줄", ko: "일정 확인해 볼게요.", pEn: "Let me know.", pKo: "알려 주세요." },
+          // Day 5 · 날짜 · 마감
+          { cat: "날짜 · 마감", en: "What's the date today?", read: "왓츠 더 데이트 투데이", ko: "오늘 며칠이에요?", pEn: "It's November 24th.", pKo: "11월 24일이에요." },
+          { cat: "날짜 · 마감", en: "When is the deadline?", read: "웬 이즈 더 데드라인", ko: "마감이 언제예요?", pEn: "It's this Friday.", pKo: "이번 금요일이에요." },
+          { cat: "날짜 · 마감", en: "I need it by Friday.", read: "아이 니드 잇 바이 프라이데이", ko: "금요일까지 필요해요.", pEn: "I'll send it today.", pKo: "오늘 보낼게요." },
+          { cat: "날짜 · 마감", en: "It's due tomorrow.", read: "잇츠 듀 투모로우", ko: "내일까지예요.", pEn: "I'm on it.", pKo: "하고 있어요." },
+          { cat: "날짜 · 마감", en: "What day is it today?", read: "왓 데이 이즈 잇 투데이", ko: "오늘 무슨 요일이에요?", pEn: "It's Tuesday.", pKo: "화요일이에요." },
+          // Day 6 · 빈도 · 초대
+          { cat: "빈도 · 초대", en: "How often do you go?", read: "하우 오픈 두 유 고", ko: "얼마나 자주 가요?", pEn: "Once a week.", pKo: "일주일에 한 번요." },
+          { cat: "빈도 · 초대", en: "I'm free this weekend.", read: "임 프리 디스 위켄드", ko: "이번 주말에 시간 돼요.", pEn: "Let's grab lunch.", pKo: "같이 점심 먹어요." },
+          { cat: "빈도 · 초대", en: "Do you have time tomorrow?", read: "두 유 해브 타임 투모로우", ko: "내일 시간 있어요?", pEn: "A little.", pKo: "조금은요." },
+          { cat: "빈도 · 초대", en: "Let's have coffee sometime.", read: "렛츠 해브 커피 썸타임", ko: "언제 한번 커피 마셔요.", pEn: "Sure, anytime.", pKo: "좋아요, 언제든." },
+          { cat: "빈도 · 초대", en: "I'll be there around 7.", read: "아일 비 데어 어라운드 세븐", ko: "7시쯤 도착할게요.", pEn: "Okay, I'll wait.", pKo: "알겠어요, 기다릴게요." },
+          // Day 7 · 식당 · 주문
+          { cat: "식당 · 주문", en: "A table for two, please.", read: "어 테이블 포 투, 플리즈", ko: "두 명 자리 주세요.", pEn: "This way, please.", pKo: "이쪽으로 오세요." },
+          { cat: "식당 · 주문", en: "How many people?", read: "하우 매니 피플", ko: "몇 분이세요?", pEn: "Two, please.", pKo: "두 명이요." },
+          { cat: "식당 · 주문", en: "I'll take it to go.", read: "아일 테이크 잇 투 고", ko: "포장할게요.", pEn: "It'll be ready in 5 minutes.", pKo: "5분이면 준비돼요." },
+          { cat: "식당 · 주문", en: "One more, please.", read: "원 모어, 플리즈", ko: "하나 더 주세요.", pEn: "Coming right up.", pKo: "바로 드릴게요." },
+          { cat: "식당 · 주문", en: "Can I get the bill?", read: "캔 아이 겟 더 빌", ko: "계산서 주시겠어요?", pEn: "Here it is.", pKo: "여기 있습니다." },
+          // Day 8 · 되묻기 · 마무리
+          { cat: "되묻기 · 마무리", en: "Could you say that again?", read: "쿠쥬 세이 댓 어게인", ko: "다시 한 번 말해 주시겠어요?", pEn: "Sure, no problem.", pKo: "네, 괜찮아요." },
+          { cat: "되묻기 · 마무리", en: "Can you speak slowly?", read: "캔 유 스픽 슬로울리", ko: "천천히 말해 주시겠어요?", pEn: "Oh, sorry.", pKo: "아, 죄송해요." },
+          { cat: "되묻기 · 마무리", en: "I don't understand.", read: "아이 돈트 언더스탠드", ko: "잘 모르겠어요.", pEn: "Let me explain.", pKo: "설명해 드릴게요." },
+          { cat: "되묻기 · 마무리", en: "How do you say this in English?", read: "하우 두 유 세이 디스 인 잉글리시", ko: "이거 영어로 뭐라고 해요?", pEn: "We say 'receipt'.", pKo: "'receipt'라고 해요." },
+          { cat: "되묻기 · 마무리", en: "Thank you for your time.", read: "땡큐 포 유어 타임", ko: "시간 내 주셔서 감사합니다.", pEn: "My pleasure.", pKo: "천만에요." }
+        ]
+      }
+    };
 
-      // Day 4 (5)
-      { id: 16, cat: "기분 · 상태", en: "good", read: "굿", ko: "좋은", pEn: "Sounds good.", pKo: "좋네." },
-      { id: 17, cat: "기분 · 상태", en: "bad", read: "배드", ko: "나쁜 / 안 좋은", pEn: "Not bad.", pKo: "나쁘지 않아." },
-      { id: 18, cat: "기분 · 상태", en: "tired", read: "타이어드", ko: "피곤한", pEn: "I'm tired.", pKo: "나 피곤해." },
-      { id: 19, cat: "기분 · 상태", en: "hungry", read: "헝그리", ko: "배고픈", pEn: "I'm hungry.", pKo: "배고파." },
-      { id: 20, cat: "기분 · 상태", en: "thanks", read: "땡스", ko: "고마워요", pEn: "Thanks a lot.", pKo: "정말 고마워요." },
-
-      // Day 5 (5)
-      { id: 21, cat: "집 · 생활", en: "home", read: "홈", ko: "집", pEn: "Go home.", pKo: "집에 가자." },
-      { id: 22, cat: "집 · 생활", en: "room", read: "룸", ko: "방", pEn: "My room.", pKo: "내 방." },
-      { id: 23, cat: "집 · 생활", en: "phone", read: "폰", ko: "휴대폰", pEn: "My phone.", pKo: "내 휴대폰." },
-      { id: 24, cat: "집 · 생활", en: "bag", read: "백", ko: "가방", pEn: "In my bag.", pKo: "내 가방 안에." },
-      { id: 25, cat: "집 · 생활", en: "today", read: "투데이", ko: "오늘", pEn: "Today is good.", pKo: "오늘 좋다." },
-
-      // Day 6 (5)
-      { id: 26, cat: "쇼핑 · 여행", en: "price", read: "프라이스", ko: "가격", pEn: "Good price.", pKo: "가격 좋다." },
-      { id: 27, cat: "쇼핑 · 여행", en: "cheap", read: "칩", ko: "싼 / 저렴한", pEn: "It's cheap.", pKo: "이거 싸다." },
-      { id: 28, cat: "쇼핑 · 여행", en: "card", read: "카드", ko: "카드", pEn: "By card.", pKo: "카드로요." },
-      { id: 29, cat: "쇼핑 · 여행", en: "here", read: "히어", ko: "여기", pEn: "Right here.", pKo: "바로 여기." },
-      { id: 30, cat: "쇼핑 · 여행", en: "station", read: "스테이션", ko: "역", pEn: "Subway station.", pKo: "지하철역." },
-
-      // Day 7 (5)
-      { id: 31, cat: "기본 동사", en: "need", read: "니드", ko: "필요하다", pEn: "I need this.", pKo: "이거 필요해." },
-      { id: 32, cat: "기본 동사", en: "like", read: "라이크", ko: "좋아하다", pEn: "I like it.", pKo: "이거 좋아." },
-      { id: 33, cat: "기분 · 상태", en: "happy", read: "해피", ko: "행복한 / 기쁜", pEn: "I'm happy.", pKo: "나 기뻐." },
-      { id: 34, cat: "기분 · 상태", en: "busy", read: "비지", ko: "바쁜", pEn: "I'm busy.", pKo: "나 바빠." },
-      { id: 35, cat: "기분 · 상태", en: "sorry", read: "쏘리", ko: "미안한", pEn: "I'm sorry.", pKo: "미안해요." }
-    ];
-
-    const STATE_KEY = "hyeyeon_daily5_state_v2";
+    const LEVEL_KEYS = ["1", "2", "3"];
     const DAILY_SIZE = 5;
+    const STATE_KEY = "hyeyeon_daily5_state_v3";
+    const LEGACY_KEY = "hyeyeon_daily5_state_v2";
+
+    // 각 단어에 고유 id 부여 (L1-1, L2-1, ...)
+    LEVEL_KEYS.forEach(function (lk) {
+      LEVELS[lk].words.forEach(function (w, i) {
+        w.id = "L" + lk + "-" + (i + 1);
+      });
+    });
 
     function safeGet(key, fallback) {
       try {
@@ -684,62 +974,129 @@
       return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
     }
 
-    const totalDays = Math.ceil(WORDS.length / DAILY_SIZE);
-    let state = safeGet(STATE_KEY, {
-      dayIndex: 0,           // 현재 진행 중인 Day (0부터 시작)
-      lastDate: getTodayStr(),
-      doneIds: [],
-      reviewingToday: false
+    function emptyLevelState() {
+      return { dayIndex: 0, lastDate: getTodayStr(), doneIds: [] };
+    }
+
+    function totalDays(lk) {
+      return Math.ceil(LEVELS[lk].words.length / DAILY_SIZE);
+    }
+
+    function dayWords(lk, dayIndex) {
+      const start = dayIndex * DAILY_SIZE;
+      return LEVELS[lk].words.slice(start, start + DAILY_SIZE);
+    }
+
+    function todayWords(lk) {
+      return dayWords(lk, state.levels[lk].dayIndex);
+    }
+
+    // ---- 상태 불러오기 (이전 버전 진행도는 Lv.1로 이어받기) ----
+    let state = safeGet(STATE_KEY, null);
+    if (!state || typeof state !== "object" || !state.levels) {
+      state = { level: "2", levels: {} };
+      LEVEL_KEYS.forEach(function (lk) {
+        state.levels[lk] = emptyLevelState();
+      });
+      const legacy = safeGet(LEGACY_KEY, null);
+      if (legacy && Array.isArray(legacy.doneIds)) {
+        state.levels["1"].doneIds = legacy.doneIds.map(function (id) { return "L1-" + id; });
+        state.levels["1"].dayIndex = typeof legacy.dayIndex === "number" ? legacy.dayIndex : 0;
+      }
+    }
+    if (LEVEL_KEYS.indexOf(String(state.level)) === -1) state.level = "2";
+    state.level = String(state.level);
+    LEVEL_KEYS.forEach(function (lk) {
+      const s = state.levels[lk];
+      if (!s || typeof s !== "object") {
+        state.levels[lk] = emptyLevelState();
+        return;
+      }
+      if (typeof s.dayIndex !== "number" || s.dayIndex < 0) s.dayIndex = 0;
+      if (!Array.isArray(s.doneIds)) s.doneIds = [];
+      if (!s.lastDate) s.lastDate = getTodayStr();
+      const max = totalDays(lk) - 1;
+      if (s.dayIndex > max) s.dayIndex = max;
     });
 
-    // 날짜가 바뀌었고, 이전 날 5단어를 다 끝냈다면 다음 날로 자동 이동!
-    function syncDayForToday() {
+    // 날짜가 바뀌었고 전날 몫을 다 끝냈으면 다음 Day로 (난이도별로 따로)
+    function syncDayForToday(lk) {
+      const s = state.levels[lk];
       const today = getTodayStr();
-      if (state.lastDate !== today) {
-        const prevStart = state.dayIndex * DAILY_SIZE;
-        const prevWords = WORDS.slice(prevStart, prevStart + DAILY_SIZE);
-        const prevDone = prevWords.length > 0 && prevWords.every(w => state.doneIds.includes(w.id));
+      if (s.lastDate !== today) {
+        const prev = dayWords(lk, s.dayIndex);
+        const prevDone = prev.length > 0 && prev.every(function (w) { return s.doneIds.indexOf(w.id) !== -1; });
         if (prevDone) {
-          state.dayIndex = (state.dayIndex + 1) % totalDays;
-          if (state.dayIndex === 0) {
-            state.doneIds = []; // 한 바퀴 다 돌았으면 새로 시작
-          }
+          s.dayIndex = (s.dayIndex + 1) % totalDays(lk);
+          if (s.dayIndex === 0) s.doneIds = [];
         }
-        state.lastDate = today;
-        state.reviewingToday = false;
-        safeSet(STATE_KEY, state);
+        s.lastDate = today;
       }
     }
 
-    syncDayForToday();
+    LEVEL_KEYS.forEach(syncDayForToday);
+    safeSet(STATE_KEY, state);
 
+    // ---- 상태 ----
     let cardIdx = 0;
     let forceShowCards = false;
 
-    function getTodayWords() {
-      const start = state.dayIndex * DAILY_SIZE;
-      return WORDS.slice(start, start + DAILY_SIZE);
+    function level() {
+      return state.level;
     }
 
-    function getUnlockedWords() {
-      const end = (state.dayIndex + 1) * DAILY_SIZE;
-      return WORDS.slice(0, end);
+    function levelState() {
+      return state.levels[level()];
     }
 
     function speak(text) {
       if (!("speechSynthesis" in window)) return;
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = "en-US";
-      u.rate = 0.85;
-      window.speechSynthesis.speak(u);
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = "en-US";
+        u.rate = 0.85;
+        window.speechSynthesis.speak(u);
+      } catch (e) {}
     }
 
-    // Tabs
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-      btn.onclick = () => {
-        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-        document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    function sizeClass(el, text) {
+      el.classList.remove("small", "tiny");
+      if (text.length > 30) el.classList.add("tiny");
+      else if (text.length > 16) el.classList.add("small");
+    }
+
+    // ---- 난이도 탭 ----
+    document.querySelectorAll(".level-btn").forEach(function (btn) {
+      btn.onclick = function () {
+        const next = btn.dataset.level;
+        if (next === state.level) return;
+        state.level = next;
+        cardIdx = 0;
+        forceShowCards = false;
+        safeSet(STATE_KEY, state);
+        renderLevelUI();
+        renderToday();
+        if (document.getElementById("panel-quiz").classList.contains("active")) startQuiz();
+        if (document.getElementById("panel-review").classList.contains("active")) renderReview();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+    });
+
+    function renderLevelUI() {
+      document.querySelectorAll(".level-btn").forEach(function (b) {
+        b.classList.toggle("active", b.dataset.level === state.level);
+      });
+      const lv = LEVELS[level()];
+      document.getElementById("levelDesc").textContent = lv.label + " " + lv.name + " · " + lv.desc;
+      document.getElementById("headerSub").textContent = lv.label + " " + lv.name + " · 오늘 5개만!";
+    }
+
+    // ---- 탭 ----
+    document.querySelectorAll(".tab-btn").forEach(function (btn) {
+      btn.onclick = function () {
+        document.querySelectorAll(".tab-btn").forEach(function (b) { b.classList.remove("active"); });
+        document.querySelectorAll(".panel").forEach(function (p) { p.classList.remove("active"); });
         btn.classList.add("active");
         document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
         if (btn.dataset.tab === "quiz") startQuiz();
@@ -748,20 +1105,24 @@
     });
 
     const flashcard = document.getElementById("flashcard");
-    flashcard.onclick = () => flashcard.classList.toggle("revealed");
+    flashcard.onclick = function () { flashcard.classList.toggle("revealed"); };
 
+    // ---- 오늘의 5개 ----
     function renderToday() {
-      const todayWords = getTodayWords();
-      const doneCount = todayWords.filter(w => state.doneIds.includes(w.id)).length;
-      const allDone = doneCount === todayWords.length;
+      const lk = level();
+      const s = levelState();
+      const words = todayWords(lk);
+      const doneCount = words.filter(function (w) { return s.doneIds.indexOf(w.id) !== -1; }).length;
+      const allDone = words.length > 0 && doneCount === words.length;
+      const catLabel = words.length > 0 ? words[0].cat : "";
 
-      document.getElementById("dayTitle").textContent = `Day ${state.dayIndex + 1} · 오늘의 5단어`;
-      document.getElementById("progressPill").textContent = `${doneCount} / ${todayWords.length}`;
+      document.getElementById("dayTitle").textContent = LEVELS[lk].label + " · Day " + (s.dayIndex + 1) + (catLabel ? " · " + catLabel : "");
+      document.getElementById("progressPill").textContent = doneCount + " / " + words.length;
       document.getElementById("progressPill").classList.toggle("done", allDone);
-      document.getElementById("dayBadge").textContent = allDone ? "오늘 완료 🎉" : `${doneCount} / ${todayWords.length} 완료`;
+      document.getElementById("dayBadge").textContent = allDone ? "오늘 완료 🎉" : doneCount + " / " + words.length + " 완료";
       document.getElementById("dayBadge").classList.toggle("done", allDone);
       document.getElementById("daySub").textContent = allDone
-        ? "할당량 끝! 내일 자정 이후 다음 5단어가 열려요"
+        ? "할당량 끝! 내일 자정 이후 다음 5개가 열려요"
         : "딱 5개만 체크하면 오늘 공부 끝이에요";
 
       const studyWrap = document.getElementById("todayStudyWrap");
@@ -770,42 +1131,54 @@
       if (allDone && !forceShowCards) {
         studyWrap.style.display = "none";
         doneScreen.classList.add("show");
+        const nextLk = lk === "1" ? "2" : lk === "2" ? "3" : "1";
+        document.getElementById("doneDesc").innerHTML =
+          "오늘 " + words.length + "개 다 끝내셨어요 👏<br />더 안 하셔도 되고, 내일 오시면 다음 5개가 열려요.";
+        document.getElementById("nextLevelBtn").textContent = "Lv." + nextLk + " " + LEVELS[nextLk].name + " 보기";
+        document.getElementById("nextLevelBtn").dataset.level = nextLk;
         return;
       }
 
       studyWrap.style.display = "flex";
       doneScreen.classList.remove("show");
 
-      if (cardIdx >= todayWords.length) cardIdx = 0;
-      if (cardIdx < 0) cardIdx = todayWords.length - 1;
-      const w = todayWords[cardIdx];
+      if (cardIdx >= words.length) cardIdx = 0;
+      if (cardIdx < 0) cardIdx = words.length - 1;
+      const w = words[cardIdx];
 
       flashcard.classList.remove("revealed");
       document.getElementById("cardCat").textContent = w.cat;
-      document.getElementById("cardCounter").textContent = `${cardIdx + 1} / ${todayWords.length}`;
-      document.getElementById("cardEn").textContent = w.en;
-      document.getElementById("cardRead").textContent = `[${w.read}]`;
+      document.getElementById("cardCounter").textContent = (cardIdx + 1) + " / " + words.length;
+
+      const enEl = document.getElementById("cardEn");
+      enEl.textContent = w.en;
+      sizeClass(enEl, w.en);
+
+      document.getElementById("cardRead").textContent = "[" + w.read + "]";
       document.getElementById("cardKo").textContent = w.ko;
       document.getElementById("cardPhraseEn").textContent = w.pEn;
       document.getElementById("cardPhraseKo").textContent = w.pKo;
 
-      const isDone = state.doneIds.includes(w.id);
+      const isDone = s.doneIds.indexOf(w.id) !== -1;
       const doneBtn = document.getElementById("doneBtn");
       doneBtn.textContent = isDone ? "외움 완료 ✓" : "외웠어요 ✓";
       doneBtn.classList.toggle("is-done", isDone);
 
-      document.getElementById("cardSpeak").onclick = (e) => {
+      document.getElementById("cardSpeak").onclick = function (e) {
         e.stopPropagation();
         speak(w.en);
       };
 
-      doneBtn.onclick = () => {
+      doneBtn.onclick = function () {
         if (isDone) {
-          state.doneIds = state.doneIds.filter(id => id !== w.id);
+          s.doneIds = s.doneIds.filter(function (id) { return id !== w.id; });
         } else {
-          state.doneIds.push(w.id);
-          // 다음 안 외운 단어로 자동 이동 (마지막이면 완료 화면으로!)
-          const nextUndone = todayWords.findIndex((item, idx) => idx > cardIdx && !state.doneIds.includes(item.id));
+          s.doneIds.push(w.id);
+          // 다음 안 외운 것 으로 자동 이동
+          let nextUndone = -1;
+          for (let i = cardIdx + 1; i < words.length; i++) {
+            if (s.doneIds.indexOf(words[i].id) === -1) { nextUndone = i; break; }
+          }
           if (nextUndone !== -1) cardIdx = nextUndone;
         }
         forceShowCards = false;
@@ -814,102 +1187,134 @@
       };
     }
 
-    document.getElementById("prevBtn").onclick = () => {
+    document.getElementById("prevBtn").onclick = function () {
       cardIdx--;
       renderToday();
     };
 
-    document.getElementById("nextBtn").onclick = () => {
+    document.getElementById("nextBtn").onclick = function () {
       cardIdx++;
       renderToday();
     };
 
-    document.getElementById("reopenTodayBtn").onclick = () => {
+    document.getElementById("reopenTodayBtn").onclick = function () {
       forceShowCards = true;
       cardIdx = 0;
       renderToday();
     };
 
-    document.getElementById("goQuizBtn").onclick = () => {
+    document.getElementById("goQuizBtn").onclick = function () {
       document.querySelector('[data-tab="quiz"]').click();
     };
 
-    // Review (오늘까지 열린 단어만)
+    document.getElementById("nextLevelBtn").onclick = function () {
+      const target = this.dataset.level || "2";
+      state.level = target;
+      cardIdx = 0;
+      forceShowCards = false;
+      safeSet(STATE_KEY, state);
+      renderLevelUI();
+      renderToday();
+      if (document.getElementById("panel-quiz").classList.contains("active")) startQuiz();
+      if (document.getElementById("panel-review").classList.contains("active")) renderReview();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    // ---- 배운 표현 (그 난이도의 오늘까지 열린 것만) ----
     function renderReview() {
-      const unlocked = getUnlockedWords();
-      document.getElementById("reviewSub").textContent = `지금까지 열린 ${unlocked.length}개만 보여드려요`;
+      const lk = level();
+      const s = levelState();
+      const all = LEVELS[lk].words;
+      const end = Math.min((s.dayIndex + 1) * DAILY_SIZE, all.length);
+      const unlocked = all.slice(0, end);
+      document.getElementById("reviewSub").textContent =
+        LEVELS[lk].label + "에서 지금까지 열린 " + unlocked.length + "개만 보여드려요";
       const wrap = document.getElementById("wordList");
       wrap.innerHTML = "";
-      unlocked.slice().reverse().forEach(w => {
-        const isDone = state.doneIds.includes(w.id);
+      unlocked.slice().reverse().forEach(function (w) {
+        const isDone = s.doneIds.indexOf(w.id) !== -1;
         const item = document.createElement("div");
         item.className = "list-item" + (isDone ? " is-done" : "");
-        item.innerHTML = `
-          <div class="list-main">
-            <div class="list-top">
-              <span class="list-en">${w.en}</span>
-              <span class="list-read">[${w.read}]</span>
-            </div>
-            <div class="list-ko">${w.ko}</div>
-            <div class="list-phrase">${w.pEn} · ${w.pKo}</div>
-          </div>
-          <button class="icon-btn" type="button" aria-label="발음">🔊</button>
-        `;
-        item.querySelector("button").onclick = () => speak(w.en);
+        item.innerHTML =
+          '<div class="list-main">' +
+            '<div class="list-top">' +
+              '<span class="list-en"></span>' +
+              '<span class="list-read"></span>' +
+            '</div>' +
+            '<div class="list-ko"></div>' +
+            '<div class="list-phrase"></div>' +
+          '</div>' +
+          '<button class="icon-btn" type="button" aria-label="발음">🔊</button>';
+        item.querySelector(".list-en").textContent = w.en;
+        item.querySelector(".list-read").textContent = "[" + w.read + "]";
+        item.querySelector(".list-ko").textContent = w.ko;
+        item.querySelector(".list-phrase").textContent = w.pEn + " · " + w.pKo;
+        item.querySelector("button").onclick = function () { speak(w.en); };
         wrap.appendChild(item);
       });
     }
 
-    // Quiz (오늘의 5단어로만!)
+    // ---- 오늘 퀴즈 (현재 난이도의 오늘 5개로만!) ----
     let quizList = [];
     let quizIdx = 0;
     let quizScore = 0;
     let quizAnswered = false;
 
     function startQuiz() {
-      quizList = [...getTodayWords()].sort(() => Math.random() - 0.5);
+      quizList = todayWords(level()).slice().sort(function () { return Math.random() - 0.5; });
       quizIdx = 0;
       quizScore = 0;
       renderQuiz();
     }
 
     function renderQuiz() {
+      if (quizList.length === 0) return;
       const q = quizList[quizIdx];
+      const pool = LEVELS[level()].words;
       quizAnswered = false;
-      document.getElementById("quizCount").textContent = `문제 ${quizIdx + 1} / ${quizList.length}`;
-      document.getElementById("quizScore").textContent = `맞힌 개수: ${quizScore}`;
-      document.getElementById("quizWord").textContent = q.en;
-      document.getElementById("quizRead").textContent = `[${q.read}]`;
+      document.getElementById("quizCount").textContent = "문제 " + (quizIdx + 1) + " / " + quizList.length;
+      document.getElementById("quizScore").textContent = "맞힌 개수: " + quizScore;
+
+      const qEl = document.getElementById("quizWord");
+      qEl.textContent = q.en;
+      sizeClass(qEl, q.en);
+      document.getElementById("quizRead").textContent = "[" + q.read + "]";
       document.getElementById("quizFeedback").textContent = "";
       document.getElementById("quizNextBtn").style.display = "none";
 
-      document.getElementById("quizSpeak").onclick = () => speak(q.en);
+      document.getElementById("quizSpeak").onclick = function () { speak(q.en); };
 
-      const others = WORDS.filter(w => w.id !== q.id).sort(() => Math.random() - 0.5).slice(0, 3);
-      const opts = [q, ...others].sort(() => Math.random() - 0.5);
+      // 오답은 같은 난이도 안에서 뜻이 겹치지 않게
+      const others = pool
+        .filter(function (w) { return w.id !== q.id && w.ko !== q.ko; })
+        .sort(function () { return Math.random() - 0.5 })
+        .slice(0, 3);
+      const opts = [q].concat(others).sort(function () { return Math.random() - 0.5 });
 
       const optWrap = document.getElementById("quizOptions");
       optWrap.innerHTML = "";
-      opts.forEach(opt => {
+      opts.forEach(function (opt) {
         const btn = document.createElement("button");
         btn.className = "quiz-opt";
+        btn.type = "button";
         btn.textContent = opt.ko;
-        btn.onclick = () => {
+        btn.onclick = function () {
           if (quizAnswered) return;
           quizAnswered = true;
           const all = optWrap.querySelectorAll(".quiz-opt");
-          all.forEach((b, i) => {
+          all.forEach(function (b, i) {
             if (opts[i].id === q.id) b.classList.add("correct");
           });
+          const fb = document.getElementById("quizFeedback");
           if (opt.id === q.id) {
             quizScore++;
-            document.getElementById("quizScore").textContent = `맞힌 개수: ${quizScore}`;
-            document.getElementById("quizFeedback").textContent = `정답! ${q.pEn} (${q.pKo})`;
-            document.getElementById("quizFeedback").style.color = "var(--green)";
+            document.getElementById("quizScore").textContent = "맞힌 개수: " + quizScore;
+            fb.textContent = "정답! " + q.pEn + " (" + q.pKo + ")";
+            fb.style.color = "var(--green)";
           } else {
             btn.classList.add("wrong");
-            document.getElementById("quizFeedback").textContent = `아쉬워요! 뜻은 '${q.ko}'예요.`;
-            document.getElementById("quizFeedback").style.color = "var(--red)";
+            fb.textContent = "아쉬워요! 뜻은 '" + q.ko + "'예요.";
+            fb.style.color = "var(--red)";
           }
           const nextBtn = document.getElementById("quizNextBtn");
           nextBtn.style.display = "block";
@@ -919,7 +1324,7 @@
       });
     }
 
-    document.getElementById("quizNextBtn").onclick = () => {
+    document.getElementById("quizNextBtn").onclick = function () {
       if (quizIdx + 1 < quizList.length) {
         quizIdx++;
         renderQuiz();
@@ -928,6 +1333,7 @@
       }
     };
 
+    renderLevelUI();
     renderToday();
   </script>
 </body>
